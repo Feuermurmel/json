@@ -189,9 +189,9 @@ final class Parser {
 	private class Token {
 		public final String match;
 		public final TokenType type;
-		/** start of the token */
+		// start of the token
 		public final int start;
-		/** start of the next token, i.e after whitespace */
+		// start of the next token, i.e after whitespace
 		public final int end;
 
 		private Token(String input, int pos) {
