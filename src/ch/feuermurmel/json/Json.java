@@ -1,5 +1,7 @@
 package ch.feuermurmel.json;
 
+import java.io.*;
+import java.util.List;
 import java.util.Map;
 
 /** Helper class for working with ch.feuermurmel.json.* instances and creating new instances. */
@@ -42,9 +44,9 @@ public final class Json {
 	 <p/>
 	 - {@code char} and instances of {@code Character} and {@code String} will be converted to {@link JsonString}.
 	 <p/>
-	 - Instances of {@link java.util.Map} will be converted to {@link JsonMap}. Their keys will be converted using {@code toString()}, their values using this method.
+	 - Instances of {@link Map} will be converted to {@link JsonMap}. Their keys will be converted using {@code toString()}, their values using this method.
 	 <p/>
-	 - Instances of {@link Iterable} will be converted to {@link java.util.List}. Their elements will be converted using this method.
+	 - Instances of {@link Iterable} will be converted to {@link List}. Their elements will be converted using this method.
 
 	 @param obj The object to convert.
 
@@ -122,6 +124,19 @@ public final class Json {
 	 @throws JsonParseException if invalid syntax is encountered.
 	 */
 	public static JsonObject parse(String input) {
-		return new Parser(input).result;
+		try {
+			return new Parser(new StringReader(input)).result;
+		} catch (IOException e) {
+			throw new RuntimeException(e); // should never happen as we're reading from a string
+		}
+	}
+
+	/**
+	 Parse a JSON document read from an inputStream.
+	 <p/>
+	 Currently, the stream has to end after the document or parsing will fail.
+	 */
+	public static JsonObject parse(InputStream input) throws IOException {
+		return new Parser(new BufferedReader(new InputStreamReader(input))).result;
 	}
 }
