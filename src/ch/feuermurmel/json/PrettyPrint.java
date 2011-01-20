@@ -108,19 +108,13 @@ public abstract class PrettyPrint {
 	public static final class List extends PrettyPrint {
 		private final java.util.List<PrettyPrint> elements = new ArrayList<PrettyPrint>();
 		private final String prefix;
-		private final String sep;
 		private final String suffix;
-		private final String prefixMulti;
-		private final String sepMulti;
-		private final String suffixMulti;
+		private final String umfixWS;
 
-		public List(String prefix, String sep, String suffix, String prefixMulti, String sepMulti, String suffixMulti) {
+		public List(String prefix, String suffix, String umfixWS) {
 			this.prefix = prefix;
-			this.sep = sep;
 			this.suffix = suffix;
-			this.prefixMulti = prefixMulti;
-			this.sepMulti = sepMulti;
-			this.suffixMulti = suffixMulti;
+			this.umfixWS = umfixWS;
 		}
 
 		public void add(PrettyPrint elem) {
@@ -140,28 +134,30 @@ public abstract class PrettyPrint {
 		@Override
 		protected void print(String indent, int numPrefix, Format format, StringBuilder builder) {
 			if (numNodes() + numPrefix > format.maxNodesPerLine) {
-				builder.append(prefixMulti);
-
-				String indentPlus = indent + format.lineIndent;
-				String sep2 = "";
-				for (PrettyPrint i : elements) {
-					builder.append(sep2 + format.lineSepparator + indentPlus);
-					i.print(indentPlus, 0, format, builder);
-					sep2 = sepMulti;
-				}
-
-				builder.append(format.lineSepparator + indent + suffixMulti);
-			} else {
 				builder.append(prefix);
 
-				String sep2 = "";
+				String indentPlus = indent + format.lineIndent;
+				String sep = "";
 				for (PrettyPrint i : elements) {
-					builder.append(sep2);
-					i.print("", 0, format, builder);
-					sep2 = sep;
+					builder.append(sep + format.lineSepparator + indentPlus);
+					i.print(indentPlus, 0, format, builder);
+					sep = ",";
 				}
 
-				builder.append(suffix);
+				builder.append(format.lineSepparator + indent + suffix);
+			} else if (elements.isEmpty()) {
+				builder.append(prefix + umfixWS + suffix);
+			} else {
+				builder.append(prefix + umfixWS);
+
+				String sep = "";
+				for (PrettyPrint i : elements) {
+					builder.append(sep);
+					i.print("", 0, format, builder);
+					sep = ", ";
+				}
+
+				builder.append(umfixWS + suffix);
 			}
 		}
 	}

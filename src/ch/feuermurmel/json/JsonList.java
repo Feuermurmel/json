@@ -74,7 +74,7 @@ public final class JsonList extends JsonObject implements Iterable<JsonObject> {
 
 	@Override
 	public PrettyPrint prettyPrint() {
-		PrettyPrint.List res = new PrettyPrint.List("[", ", ", "]", "[", ",", "]");
+		PrettyPrint.List res = new PrettyPrint.List("[", "]", "");
 
 		for (JsonObject i : data)
 			res.add(i.prettyPrint());
@@ -91,7 +91,7 @@ public final class JsonList extends JsonObject implements Iterable<JsonObject> {
 			builder.append(sep);
 			builder.append(i);
 
-			sep = ", ";
+			sep = ",";
 		}
 
 		builder.append("]");

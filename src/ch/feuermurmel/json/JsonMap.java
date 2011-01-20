@@ -77,7 +77,7 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 
 	@Override
 	public PrettyPrint prettyPrint() {
-		PrettyPrint.List res = new PrettyPrint.List("{ ", ", ", " }", "{", ",", "}");
+		PrettyPrint.List res = new PrettyPrint.List("{", "}", " ");
 
 		for (Map.Entry<String, JsonObject> i : data.entrySet())
 			res.add(new PrettyPrint.Prefix(new JsonString(i.getKey()) + ": ", i.getValue().prettyPrint()));
@@ -91,8 +91,8 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 
 		String sep = "";
 		for (Map.Entry<String, JsonObject> i : data.entrySet()) {
-			builder.append(sep + new JsonString(i.getKey()) + ": " + i.getValue());
-			sep = ", ";
+			builder.append(sep + new JsonString(i.getKey()) + ":" + i.getValue());
+			sep = ",";
 		}
 
 		builder.append("}");
