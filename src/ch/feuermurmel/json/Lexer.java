@@ -32,9 +32,9 @@ final class Lexer {
 	// read token and move to the next
 	public Token useToken() throws IOException {
 		Token res = nextToken;
-
+		
 		nextToken = readToken();
-
+		
 		return res;
 	}
 
@@ -66,29 +66,20 @@ final class Lexer {
 			return keywordToken(TokenType.False, "false");
 		} else if (testChar("n")) {
 			return keywordToken(TokenType.Null, "null");
-		} else if (testChar("0123456789-")) {
+		} else if (testChar("0123456789") || testChar("-")) {
+			// accepts any glob made up of number characters, gets filtered by the parser ...
 			boolean isFloat = false;
 
 			startToken();
 			useChar();
-
-			while (testChar("0123456789"))
+			
+			while (true) {
+				if (testChar(".") || testChar("e") || testChar("E"))
+					isFloat = true;
+				else if (!testChar("0123456789") && !testChar("-"))
+					break;
+				
 				useChar();
-
-			if (testChar(".")) {
-				isFloat = true;
-				useChar();
-
-				while (testChar("0123456789"))
-					useChar();
-			}
-
-			if (testChar("eE")) {
-				isFloat = true;
-				useChar();
-
-				while (testChar("0123456789"))
-					useChar();
 			}
 
 			if (isFloat)

@@ -76,9 +76,21 @@ final class Parser {
 			lexer.useToken();
 			return new JsonBoolean(true);
 		} else if (lexer.testToken(Lexer.TokenType.Integer)) {
-			return new JsonNumber(Long.valueOf(lexer.useToken().match));
+			Lexer.Token token = lexer.useToken();
+			
+			try {
+				return new JsonNumber(Long.valueOf(token.match));
+			} catch (NumberFormatException ignored) {
+				throw new JsonParseException(token.line, token.column, "Invalid number literal.");
+			}
 		} else if (lexer.testToken(Lexer.TokenType.Float)) {
-			return new JsonNumber(Double.valueOf(lexer.useToken().match));
+			Lexer.Token token = lexer.useToken();
+
+			try {
+				return new JsonNumber(Double.valueOf(lexer.useToken().match));
+			} catch (NumberFormatException ignored) {
+				throw new JsonParseException(token.line, token.column, "Invalid number literal.");
+			}
 		} else if (lexer.testToken(Lexer.TokenType.String)) {
 			return new JsonString(parseString(lexer.useToken()));
 		} else if (lexer.testToken(Lexer.TokenType.OpenBracket)) {

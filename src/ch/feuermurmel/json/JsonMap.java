@@ -86,10 +86,8 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 	}
 
 	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("{ ");
+	public void toString(StringBuilder builder) {
+		builder.append("{");
 
 		String sep = "";
 		for (Map.Entry<String, JsonObject> i : data.entrySet()) {
@@ -97,9 +95,7 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 			sep = ", ";
 		}
 
-		builder.append(" }");
-
-		return builder.toString();
+		builder.append("}");
 	}
 
 	@Override

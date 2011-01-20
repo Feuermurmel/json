@@ -83,9 +83,7 @@ public final class JsonList extends JsonObject implements Iterable<JsonObject> {
 	}
 
 	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
+	public void toString(StringBuilder builder) {
 		builder.append("[");
 
 		String sep = "";
@@ -97,8 +95,6 @@ public final class JsonList extends JsonObject implements Iterable<JsonObject> {
 		}
 
 		builder.append("]");
-
-		return builder.toString();
 	}
 
 	@Override

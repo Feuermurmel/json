@@ -25,29 +25,26 @@ public final class JsonString extends JsonObject {
 	}
 
 	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
+	public void toString(StringBuilder builder) {
 		builder.append("\"");
 		for (int i = 0; i < value.length(); i += 1) {
 			char c = value.charAt(i);
 
-			if (c ==  '\"')
+			if (c == '\"')
 				builder.append("\\\"");
-			else if (c ==  '\\')
+			else if (c == '\\')
 				builder.append("\\\\");
-			else if (c ==  '\n')
+			else if (c == '\n')
 				builder.append("\\n");
-			else if (c ==  '\t')
+			else if (c == '\t')
 				builder.append("\\t");
 			else if (c < (char) 32 || c > (char) 126)
 				builder.append(String.format("\\u%04x", (int) c));
 			else
 				builder.append(c);
 		}
-		
+
 		builder.append("\"");
-		return builder.toString();
 	}
 
 	@Override

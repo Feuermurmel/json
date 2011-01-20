@@ -39,7 +39,17 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	 <p/>
 	 This will use a very compact representation with minimal whitespace. Use {@link #prettyPrint()} to get a wrapped and indented string representation.
 	 */
-	public abstract String toString();
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		
+		toString(builder);
+		
+		return builder.toString();
+	}
+	
+	protected void toString(StringBuilder builder) {
+		builder.append(toString());
+	}
 
 	/**
 	 Convert this JSON object to a Java boolean.
