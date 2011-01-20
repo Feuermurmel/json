@@ -45,28 +45,28 @@ final class Lexer {
 
 	// parse one token including it's leading whitespace
 	private Token readToken() throws IOException {
-		while (testChar(" \t\n"))
+		while (testChar(' ') || testChar('\t') || testChar('\n'))
 			useChar();
 
-		if (testChar(",")) {
+		if (testChar(',')) {
 			return singleCharToken(TokenType.Comma);
-		} else if (testChar(":")) {
+		} else if (testChar(':')) {
 			return singleCharToken(TokenType.Colon);
-		} else if (testChar("{")) {
+		} else if (testChar('{')) {
 			return singleCharToken(TokenType.OpenBrace);
-		} else if (testChar("}")) {
+		} else if (testChar('}')) {
 			return singleCharToken(TokenType.CloseBrace);
-		} else if (testChar("[")) {
+		} else if (testChar('[')) {
 			return singleCharToken(TokenType.OpenBracket);
-		} else if (testChar("]")) {
+		} else if (testChar(']')) {
 			return singleCharToken(TokenType.CloseBracket);
-		} else if (testChar("t")) {
+		} else if (testChar('t')) {
 			return keywordToken(TokenType.True, "true");
-		} else if (testChar("f")) {
+		} else if (testChar('f')) {
 			return keywordToken(TokenType.False, "false");
-		} else if (testChar("n")) {
+		} else if (testChar('n')) {
 			return keywordToken(TokenType.Null, "null");
-		} else if (testChar("0123456789") || testChar("-")) {
+		} else if (testChar('0', '9') || testChar('-')) {
 			// accepts any glob made up of number characters, gets filtered by the parser ...
 			boolean isFloat = false;
 
@@ -74,9 +74,9 @@ final class Lexer {
 			useChar();
 			
 			while (true) {
-				if (testChar(".") || testChar("e") || testChar("E"))
+				if (testChar('.') || testChar('e') || testChar('E'))
 					isFloat = true;
-				else if (!testChar("0123456789") && !testChar("-"))
+				else if (!testChar('0', '9') && !testChar('-'))
 					break;
 				
 				useChar();
@@ -86,17 +86,17 @@ final class Lexer {
 				return finishToken(TokenType.Float);
 			else
 				return finishToken(TokenType.Integer);
-		} else if (testChar("\"")) {
+		} else if (testChar('\"')) {
 			// "((?:[^\\"]|\\.)*)"
 			startToken();
 			useChar();
 
-			while (!testChar("\"")) {
+			while (!testChar('\"')) {
 				if (isEOF())
 					throw new JsonParseException(currentLine, currentColumn, "EOF inside string");
 				else if (testControlChar())
 					throw new JsonParseException(currentLine, currentColumn, "Invalid control character");
-				else if (testChar("\\"))
+				else if (testChar('\\'))
 					useChar();
 
 				useChar();
@@ -143,7 +143,7 @@ final class Lexer {
 		useChar();
 
 		for (int i = 1; i < length; i += 1) {
-			if (!testChar(String.valueOf(keyword.charAt(i))))
+			if (!testChar(keyword.charAt(i)))
 				throw new JsonParseException(currentLine, currentColumn - i, "Invalid token"); // i hope we're safe with `currentColumn - i', multi-line keywords aren't that common ;-)
 
 			useChar();
@@ -171,9 +171,14 @@ final class Lexer {
 		return res;
 	}
 
-	// test whether the current character is one of chars.
-	private boolean testChar(String chars) {
-		return chars.indexOf(nextChar) != -1;
+	// test whether the current character is in a given character range.
+	private boolean testChar(char chMin, char chMax) {
+		return nextChar >= chMin && nextChar <= chMax;
+	}
+
+	// test whether the current character is ch.
+	private boolean testChar(char ch) {
+		return nextChar == ch;
 	}
 
 	// test whether the current character is a control character.
