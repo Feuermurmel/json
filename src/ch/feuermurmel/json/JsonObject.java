@@ -1,5 +1,8 @@
 package ch.feuermurmel.json;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
 /**
  Super class of all classes implementing the different JSON datatypes.
  <p/>
@@ -41,14 +44,21 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	 */
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		
-		toString(builder);
-		
+
+		try {
+			toString(builder);
+		} catch (IOException e) {
+			throw new RuntimeException(e); // should never happen ...
+		}
+
 		return builder.toString();
 	}
-	
-	protected void toString(StringBuilder builder) {
-		builder.append(toString());
+
+	/**
+	 Write this object as a JSON document to an instance of {@code Appendable} like {@link StringBuilder} or {@link OutputStreamWriter}.
+	 */
+	public void toString(Appendable dest) throws IOException {
+		dest.append(toString());
 	}
 
 	/**

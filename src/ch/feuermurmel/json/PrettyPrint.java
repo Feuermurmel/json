@@ -1,5 +1,7 @@
 package ch.feuermurmel.json;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +19,9 @@ public abstract class PrettyPrint {
 
 	protected abstract int numNodes();
 
-	protected abstract void print(String indent, int numPrefix, Format format, StringBuilder builder);
+	protected abstract boolean isSimple();
+	
+	protected abstract void toString(String indent, int numPrefix, Format format, Appendable dest) throws IOException;
 
 	/**
 	 Set formatting parameters used for pretty-printing.
@@ -46,12 +50,26 @@ public abstract class PrettyPrint {
 		return format(format.maxNodesPerLine, lineIndent, lineSepparator);
 	}
 
+	/**
+	 Convert the formatted {@code JsonObject} to a string.
+	 */
 	public final String toString() {
 		StringBuilder builder = new StringBuilder();
 
-		print("", 0, format, builder);
+		try {
+			toString(builder);
+		} catch (IOException e) {
+			throw new RuntimeException(e); // should not happen
+		}
 
 		return builder.toString();
+	}
+
+	/**
+	 Write the formatted {@code JsonObject} to an instance of {@code Appendable} like {@link StringBuilder} or {@link OutputStreamWriter}.
+	 */
+	public final void toString(Appendable dest) throws IOException {
+		toString("", 0, format, dest);
 	}
 
 	private static final class Format {
@@ -79,8 +97,13 @@ public abstract class PrettyPrint {
 		}
 
 		@Override
-		protected void print(String indent, int numPrefix, Format format, StringBuilder builder) {
-			builder.append(value);
+		protected boolean isSimple() {
+			return true;
+		}
+
+		@Override
+		protected void toString(String indent, int numPrefix, Format format, Appendable dest) throws IOException {
+			dest.append(value);
 		}
 	}
 
@@ -99,9 +122,14 @@ public abstract class PrettyPrint {
 		}
 
 		@Override
-		protected void print(String indent, int numPrefix, Format format, StringBuilder builder) {
-			builder.append(prefix);
-			value.print(indent, numPrefix + 1, format, builder);
+		protected boolean isSimple() {
+			return value.isSimple();
+		}
+
+		@Override
+		protected void toString(String indent, int numPrefix, Format format, Appendable dest) throws IOException {
+			dest.append(prefix);
+			value.toString(indent, numPrefix + 1, format, dest);
 		}
 	}
 
@@ -132,32 +160,46 @@ public abstract class PrettyPrint {
 		}
 
 		@Override
-		protected void print(String indent, int numPrefix, Format format, StringBuilder builder) {
-			if (numNodes() + numPrefix > format.maxNodesPerLine) {
-				builder.append(prefix);
+		protected boolean isSimple() {
+			return elements.isEmpty();
+		}
+
+		@Override
+		protected void toString(String indent, int numPrefix, Format format, Appendable dest) throws IOException {
+			boolean simple = true;
+
+			for (PrettyPrint i : elements) {
+				if (!i.isSimple()) {
+					simple = false;
+					break;
+				}
+			}
+
+			if (elements.isEmpty()) {
+				dest.append(prefix + umfixWS + suffix);
+			} else if (simple || numNodes() + numPrefix <= format.maxNodesPerLine) {
+				dest.append(prefix + umfixWS);
+
+				String sep = "";
+				for (PrettyPrint i : elements) {
+					dest.append(sep);
+					i.toString("", 0, format, dest);
+					sep = ", ";
+				}
+
+				dest.append(umfixWS + suffix);
+			} else {
+				dest.append(prefix);
 
 				String indentPlus = indent + format.lineIndent;
 				String sep = "";
 				for (PrettyPrint i : elements) {
-					builder.append(sep + format.lineSepparator + indentPlus);
-					i.print(indentPlus, 0, format, builder);
+					dest.append(sep + format.lineSepparator + indentPlus);
+					i.toString(indentPlus, 0, format, dest);
 					sep = ",";
 				}
 
-				builder.append(format.lineSepparator + indent + suffix);
-			} else if (elements.isEmpty()) {
-				builder.append(prefix + umfixWS + suffix);
-			} else {
-				builder.append(prefix + umfixWS);
-
-				String sep = "";
-				for (PrettyPrint i : elements) {
-					builder.append(sep);
-					i.print("", 0, format, builder);
-					sep = ", ";
-				}
-
-				builder.append(umfixWS + suffix);
+				dest.append(format.lineSepparator + indent + suffix);
 			}
 		}
 	}

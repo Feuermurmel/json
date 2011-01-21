@@ -1,5 +1,6 @@
 package ch.feuermurmel.json;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -86,16 +87,20 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 	}
 
 	@Override
-	public void toString(StringBuilder builder) {
-		builder.append("{");
+	public void toString(Appendable dest) throws IOException {
+		dest.append("{");
 
 		String sep = "";
 		for (Map.Entry<String, JsonObject> i : data.entrySet()) {
-			builder.append(sep + new JsonString(i.getKey()) + ":" + i.getValue());
+			dest.append(sep);
+			new JsonString(i.getKey()).toString(dest);
+			dest.append(":");
+			i.getValue().toString(dest);
+			
 			sep = ",";
 		}
 
-		builder.append("}");
+		dest.append("}");
 	}
 
 	@Override

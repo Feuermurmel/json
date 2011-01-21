@@ -1,5 +1,7 @@
 package ch.feuermurmel.json;
 
+import java.io.IOException;
+
 /**
  Class used for representing JSON strings.
  <p/>
@@ -25,26 +27,27 @@ public final class JsonString extends JsonObject {
 	}
 
 	@Override
-	public void toString(StringBuilder builder) {
-		builder.append("\"");
+	public void toString(Appendable dest) throws IOException {
+		dest.append("\"");
+		
 		for (int i = 0; i < value.length(); i += 1) {
 			char c = value.charAt(i);
 
 			if (c == '\"')
-				builder.append("\\\"");
+				dest.append("\\\"");
 			else if (c == '\\')
-				builder.append("\\\\");
+				dest.append("\\\\");
 			else if (c == '\n')
-				builder.append("\\n");
+				dest.append("\\n");
 			else if (c == '\t')
-				builder.append("\\t");
+				dest.append("\\t");
 			else if (c < (char) 32 || c > (char) 126)
-				builder.append(String.format("\\u%04x", (int) c));
+				dest.append(String.format("\\u%04x", (int) c));
 			else
-				builder.append(c);
+				dest.append(c);
 		}
 
-		builder.append("\"");
+		dest.append("\"");
 	}
 
 	@Override

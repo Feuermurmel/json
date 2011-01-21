@@ -1,5 +1,6 @@
 package ch.feuermurmel.json;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -83,18 +84,18 @@ public final class JsonList extends JsonObject implements Iterable<JsonObject> {
 	}
 
 	@Override
-	public void toString(StringBuilder builder) {
-		builder.append("[");
+	public void toString(Appendable dest) throws IOException {
+		dest.append("[");
 
 		String sep = "";
 		for (JsonObject i : data) {
-			builder.append(sep);
-			builder.append(i);
+			dest.append(sep);
+			i.toString(dest);
 
 			sep = ",";
 		}
 
-		builder.append("]");
+		dest.append("]");
 	}
 
 	@Override
