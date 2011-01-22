@@ -87,7 +87,7 @@ final class Parser {
 			Lexer.Token token = lexer.useToken();
 
 			try {
-				return new JsonNumber(Double.valueOf(lexer.useToken().match));
+				return new JsonNumber(Double.valueOf(token.match));
 			} catch (NumberFormatException ignored) {
 				throw new JsonParseException(token.line, token.column, "Invalid number literal.");
 			}
