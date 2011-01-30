@@ -40,7 +40,7 @@ class Decoder {
 			int size = ~BinaryJson.prefixMask & tag;
 			
 			if (prefix == BinaryJson.prefixUseSavedObject) {
-				return savedObjects.get((int) readSize(size));
+				return savedObjects.get((int) readSize(size)).clone();
 			} else if (prefix == BinaryJson.prefixPositiveInteger) {
 				return Json.convert(readLong(size));
 			} else if (prefix == BinaryJson.prefixNegativeInteger) {
