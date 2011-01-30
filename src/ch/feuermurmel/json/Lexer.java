@@ -132,7 +132,10 @@ final class Lexer {
 
 	// create a token form the single, current character, eats the character
 	private Token singleCharToken(TokenType type) throws IOException {
-		return new Token(type, String.valueOf(useChar()), currentLine, currentColumn);
+		int line = currentLine;
+		int column = currentColumn;
+		
+		return new Token(type, String.valueOf(useChar()), line, column);
 	}
 
 	// reads characters from a keyword token, and eats them. throws an exception if the keyword does not match.
