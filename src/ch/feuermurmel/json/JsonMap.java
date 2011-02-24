@@ -25,7 +25,7 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 	 @param k The key. A String, may be empty but not null.
 	 @param v The object to add.
 	 */
-	public JsonMap add(String k, Object v) {
+	public JsonMap put(String k, Object v) {
 		data.put(k, Json.convert(v));
 
 		return this;
@@ -121,7 +121,7 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 		JsonMap res = new JsonMap();
 
 		for (Map.Entry<String, JsonObject> i : data.entrySet())
-			res.add(i.getKey(), i.getValue().clone());
+			res.put(i.getKey(), i.getValue().clone());
 
 		return res;
 	}

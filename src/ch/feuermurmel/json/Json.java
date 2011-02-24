@@ -96,7 +96,7 @@ public final class Json {
 			JsonMap res = new JsonMap();
 
 			for (Map.Entry<?, ?> i : ((Map<?, ?>) obj).entrySet())
-				res.add(i.getKey().toString(), i.getValue());
+				res.put(i.getKey().toString(), i.getValue());
 
 			return res;
 		}

@@ -8,11 +8,6 @@ package ch.feuermurmel.json;
 public final class JsonBoolean extends JsonObject {
 	private final boolean value;
 
-	@Override
-	public boolean asBoolean() {
-		return value;
-	}
-
 	/**
 	 Normally you use {@link Json#convert(Object)} to convert a Java boolean to a JSON object or directly use it as an argument with JSON data structures.
 
@@ -20,6 +15,11 @@ public final class JsonBoolean extends JsonObject {
 	 */
 	public JsonBoolean(boolean value) {
 		this.value = value;
+	}
+
+	@Override
+	public boolean asBoolean() {
+		return value;
 	}
 
 	@Override

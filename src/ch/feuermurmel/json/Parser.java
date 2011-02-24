@@ -130,7 +130,7 @@ final class Parser {
 						throw problemUnexpectedToken("colon");
 
 					lexer.useToken(); // :
-					map.add(key, parse());
+					map.put(key, parse());
 
 					if (lexer.testToken(Lexer.TokenType.Comma))
 						lexer.useToken(); // ,

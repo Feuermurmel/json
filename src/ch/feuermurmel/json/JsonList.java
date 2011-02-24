@@ -39,6 +39,18 @@ public final class JsonList extends JsonObject implements Iterable<JsonObject> {
 	}
 
 	/**
+	 Replace the object at the specified index.
+
+	 @param index Index of the object to replace.
+	 @param e The replacment object.
+	 */
+	public JsonList set(int index, Object e) {
+		data.set(index, Json.convert(e));
+
+		return this;
+	}
+
+	/**
 	 Remove the object at the specified index.
 
 	 @param index Index of object to remove.

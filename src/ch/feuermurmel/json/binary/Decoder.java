@@ -68,7 +68,7 @@ class Decoder {
 		for (int i = 0; i < length; i += 1) {
 			String key = readObject().asString();
 			
-			map.add(key, readObject());
+			map.put(key, readObject());
 		}
 
 		return map;
