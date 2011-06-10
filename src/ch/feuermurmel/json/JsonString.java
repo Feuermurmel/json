@@ -17,7 +17,7 @@ public final class JsonString extends JsonObject {
 
 	 @param value Value for the new {@code JsonString}.
 	 */
-	public JsonString(String value) {
+	private JsonString(String value) {
 		this.value = value;
 	}
 
@@ -66,5 +66,9 @@ public final class JsonString extends JsonObject {
 	@Override
 	public JsonString clone() {
 		return this;
+	}
+	
+	public static JsonString instance(String value) {
+		return new JsonString(value);
 	}
 }

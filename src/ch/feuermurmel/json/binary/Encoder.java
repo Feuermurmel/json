@@ -41,7 +41,7 @@ class Encoder {
 		writeSize(prefixMap, obj.size());
 		
 		for (String i : obj) {
-			writeSavedObject(new JsonString(i));
+			writeSavedObject(JsonString.instance(i));
 			writeObject(obj.get(i));
 		}
 	}

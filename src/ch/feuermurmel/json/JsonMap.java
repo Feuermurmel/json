@@ -14,7 +14,9 @@ import java.util.*;
  */
 public final class JsonMap extends JsonObject implements Iterable<String> {
 	private final Map<String, JsonObject> data = new LinkedHashMap<String, JsonObject>();
-
+	
+	private JsonMap() { }
+	
 	/**
 	 Adds or replaces a value for the given key.
 	 <p/>
@@ -81,7 +83,7 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 		PrettyPrint.List res = new PrettyPrint.List("{", "}", " ");
 
 		for (Map.Entry<String, JsonObject> i : data.entrySet())
-			res.add(new PrettyPrint.Prefix(new JsonString(i.getKey()) + ": ", i.getValue().prettyPrint()));
+			res.add(new PrettyPrint.Prefix(JsonString.instance(i.getKey()) + ": ", i.getValue().prettyPrint()));
 
 		return res;
 	}
@@ -93,7 +95,7 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 		String sep = "";
 		for (Map.Entry<String, JsonObject> i : data.entrySet()) {
 			dest.append(sep);
-			new JsonString(i.getKey()).toString(dest);
+			JsonString.instance(i.getKey()).toString(dest);
 			dest.append(":");
 			i.getValue().toString(dest);
 			
@@ -124,5 +126,24 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 			res.put(i.getKey(), i.getValue().clone());
 
 		return res;
+	}
+
+	/**
+	 Create and return an empty {@code JsonMap}.
+	 */
+	public static JsonMap create() {
+		return new JsonMap();
+	}
+
+	/**
+	 Create and return a {@code JsonList} and initialize with the contents of {@code contents}.
+	 */
+	public static JsonMap create(Map<?, ?> content) {
+		JsonMap map = new JsonMap();
+
+		for (Map.Entry<?, ?> i : content.entrySet())
+			map.put(i.getKey().toString(), i.getValue());
+
+		return map;
 	}
 }

@@ -15,6 +15,8 @@ import java.util.*;
 public final class JsonList extends JsonObject implements Iterable<JsonObject> {
 	private final List<JsonObject> data = new ArrayList<JsonObject>();
 
+	private JsonList() { }
+
 	/**
 	 Add an object at the end.
 
@@ -131,5 +133,24 @@ public final class JsonList extends JsonObject implements Iterable<JsonObject> {
 			res.add(i.clone());
 
 		return res;
+	}
+
+	/**
+	 Create and return an empty {@code JsonList}.
+	 */
+	public static JsonList create() {
+		return new JsonList();
+	}
+
+	/**
+	 Create and return a {@code JsonList} and initialize with the contents of {@code contents}.
+	 */
+	public static JsonList create(Iterable<?> content) {
+		JsonList list = new JsonList();
+		
+		for (Object i : content)
+			list.add(i);
+		
+		return list;
 	}
 }

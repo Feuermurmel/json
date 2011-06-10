@@ -13,7 +13,7 @@ public final class JsonBoolean extends JsonObject {
 
 	 @param value value of the new JsonBoolean.
 	 */
-	public JsonBoolean(boolean value) {
+	private JsonBoolean(boolean value) {
 		this.value = value;
 	}
 
@@ -43,5 +43,12 @@ public final class JsonBoolean extends JsonObject {
 	@Override
 	public JsonBoolean clone() {
 		return this;
+	}
+
+	private static final JsonBoolean falseInstance = new JsonBoolean(false);
+	private static final JsonBoolean trueInstance = new JsonBoolean(true);
+	
+	public static JsonBoolean instance(boolean value) {
+		return value ? trueInstance : falseInstance;
 	}
 }

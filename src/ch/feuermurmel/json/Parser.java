@@ -22,7 +22,7 @@ final class Parser {
 
 		return new JsonParseException(token.line, token.column, "Expected " + expected);
 	}
-
+	
 	private static String parseString(Lexer.Token token) {
 		StringBuilder res = new StringBuilder();
 		String string = token.match;
@@ -68,18 +68,18 @@ final class Parser {
 	private JsonObject parse() throws IOException {
 		if (lexer.testToken(Lexer.TokenType.Null)) {
 			lexer.useToken();
-			return new JsonNull();
+			return JsonNull.instance();
 		} else if (lexer.testToken(Lexer.TokenType.False)) {
 			lexer.useToken();
-			return new JsonBoolean(false);
+			return JsonBoolean.instance(false);
 		} else if (lexer.testToken(Lexer.TokenType.True)) {
 			lexer.useToken();
-			return new JsonBoolean(true);
+			return JsonBoolean.instance(true);
 		} else if (lexer.testToken(Lexer.TokenType.Integer)) {
 			Lexer.Token token = lexer.useToken();
 			
 			try {
-				return new JsonNumber(Long.valueOf(token.match));
+				return JsonNumber.instance(Long.valueOf(token.match));
 			} catch (NumberFormatException ignored) {
 				throw new JsonParseException(token.line, token.column, "Invalid number literal.");
 			}
@@ -87,14 +87,14 @@ final class Parser {
 			Lexer.Token token = lexer.useToken();
 
 			try {
-				return new JsonNumber(Double.valueOf(token.match));
+				return JsonNumber.instance(Double.valueOf(token.match));
 			} catch (NumberFormatException ignored) {
 				throw new JsonParseException(token.line, token.column, "Invalid number literal.");
 			}
 		} else if (lexer.testToken(Lexer.TokenType.String)) {
-			return new JsonString(parseString(lexer.useToken()));
+			return JsonString.instance(parseString(lexer.useToken()));
 		} else if (lexer.testToken(Lexer.TokenType.OpenBracket)) {
-			JsonList list = new JsonList();
+			JsonList list = JsonList.create();
 
 			lexer.useToken(); // [
 
@@ -115,7 +115,7 @@ final class Parser {
 
 			return list;
 		} else if (lexer.testToken(Lexer.TokenType.OpenBrace)) {
-			JsonMap map = new JsonMap();
+			JsonMap map = JsonMap.create();
 
 			lexer.useToken(); // {
 

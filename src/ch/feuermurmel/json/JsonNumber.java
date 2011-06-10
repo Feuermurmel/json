@@ -16,7 +16,7 @@ public final class JsonNumber extends JsonObject {
 
 	 @param value Value of the new {@link JsonNumber}.
 	 */
-	public JsonNumber(double value) {
+	private JsonNumber(double value) {
 		valueLong = 0;
 		valueDouble = value;
 	}
@@ -26,7 +26,7 @@ public final class JsonNumber extends JsonObject {
 
 	 @param value Value of the new {@link JsonNumber}.
 	 */
-	public JsonNumber(long value) {
+	private JsonNumber(long value) {
 		valueLong = value;
 		valueDouble = 0d;
 	}
@@ -85,5 +85,13 @@ public final class JsonNumber extends JsonObject {
 	@Override
 	public JsonObject clone() {
 		return this;
+	}
+
+	public static JsonNumber instance(long value) {
+		return new JsonNumber(value);
+	}
+
+	public static JsonNumber instance(double value) {
+		return new JsonNumber(value);
 	}
 }

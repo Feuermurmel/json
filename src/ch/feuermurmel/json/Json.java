@@ -17,7 +17,7 @@ public final class Json {
 	 @return a new, empty JsonList.
 	 */
 	public static JsonList list() {
-		return new JsonList();
+		return JsonList.create();
 	}
 
 	/**
@@ -28,7 +28,7 @@ public final class Json {
 	 @return a new, empty JsonList.
 	 */
 	public static JsonMap map() {
-		return new JsonMap();
+		return JsonMap.create();
 	}
 
 	/**
@@ -59,57 +59,45 @@ public final class Json {
 
 		// special null treatment
 		if (obj == null)
-			return new JsonNull();
+			return JsonNull.instance();
 
 		// booleans
 		if (obj instanceof Boolean)
-			return new JsonBoolean((Boolean) obj);
+			return JsonBoolean.instance((Boolean) obj);
 
 		// numbers
 		if (obj instanceof Byte)
-			return new JsonNumber((Byte) obj);
+			return JsonNumber.instance((Byte) obj);
 
 		if (obj instanceof Short)
-			return new JsonNumber((Short) obj);
+			return JsonNumber.instance((Short) obj);
 
 		if (obj instanceof Integer)
-			return new JsonNumber((Integer) obj);
+			return JsonNumber.instance((Integer) obj);
 
 		if (obj instanceof Long)
-			return new JsonNumber((Long) obj);
+			return JsonNumber.instance((Long) obj);
 
 		if (obj instanceof Float)
-			return new JsonNumber((Float) obj);
+			return JsonNumber.instance((Float) obj);
 
 		if (obj instanceof Double)
-			return new JsonNumber((Double) obj);
+			return JsonNumber.instance((Double) obj);
 
 		// strings
 		if (obj instanceof Character)
-			return new JsonString(obj.toString());
+			return JsonString.instance(obj.toString());
 
 		if (obj instanceof String)
-			return new JsonString((String) obj);
+			return JsonString.instance((String) obj);
 
 		// maps
-		if (obj instanceof Map) {
-			JsonMap res = new JsonMap();
-
-			for (Map.Entry<?, ?> i : ((Map<?, ?>) obj).entrySet())
-				res.put(i.getKey().toString(), i.getValue());
-
-			return res;
-		}
+		if (obj instanceof Map)
+			return JsonMap.create((Map<?, ?>) obj);
 
 		// lists
-		if (obj instanceof Iterable) {
-			JsonList res = new JsonList();
-
-			for (Object i : (Iterable<?>) obj)
-				res.add(i);
-
-			return res;
-		}
+		if (obj instanceof Iterable)
+			return JsonList.create((Iterable<?>) obj);
 
 		throw new UnsupportedTypeException("Objects of type " + obj.getClass().getName() + " can't be converted to a JsonObject!");
 	}

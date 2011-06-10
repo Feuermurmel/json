@@ -6,6 +6,8 @@ package ch.feuermurmel.json;
  This class us used so null values extracted from a JSON data structure need no special reatment for method calls like .equals() or .clone(). You do not need to create instances of this class as all JSON classes accept Java nulls as arguments, where appropriate.
  */
 public final class JsonNull extends JsonObject {
+	private JsonNull() { }
+
 	@Override
 	public String toString() {
 		return "null";
@@ -24,5 +26,11 @@ public final class JsonNull extends JsonObject {
 	@Override
 	public JsonNull clone() {
 		return this;
+	}
+	
+	private static final JsonNull instance = new JsonNull();
+	
+	public static JsonNull instance() {
+		return instance;
 	}
 }
