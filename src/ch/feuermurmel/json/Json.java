@@ -124,7 +124,7 @@ public final class Json {
 	 <p/>
 	 Currently, the stream has to end after the document or parsing will fail.
 	 */
-	public static JsonObject parse(InputStream input) throws IOException {
-		return new Parser(new BufferedReader(new InputStreamReader(input))).result;
+	public static JsonObject parse(Reader input) throws IOException {
+		return new Parser(input).result;
 	}
 }
