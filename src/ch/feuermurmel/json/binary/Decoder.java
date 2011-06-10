@@ -5,11 +5,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-class Decoder {
+final class Decoder {
 	private final DataInputStream input;
 	private final List<JsonObject> savedObjects = new ArrayList<JsonObject>();
 	
-
 	public Decoder(InputStream input) {
 		this.input = new DataInputStream(input);
 	}

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static ch.feuermurmel.json.binary.BinaryJson.*;
 
-class Encoder {
+final class Encoder {
 	private final DataOutputStream output;
 	private final Map<JsonObject, Integer> savedObjects = new HashMap<JsonObject, Integer>();
 	private int nextSavedObjectId = 0;
@@ -68,7 +68,7 @@ class Encoder {
 	}
 
 	private void writeString(String value) throws IOException {
-		byte[] bytes = value.getBytes(BinaryJson.charset);
+		byte[] bytes = value.getBytes(charset);
 		
 		writeSize(prefixString, bytes.length);
 		output.write(bytes);

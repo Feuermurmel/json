@@ -4,6 +4,6 @@ package ch.feuermurmel.json;
 public class JsonParseException extends RuntimeException {
 	/** @param msg Contains the line and column numbers and an explanation of the problem. */
 	public JsonParseException(int line, int column, String msg) {
-		super("At " + line + ":" + column + ": " + msg);
+		super(String.format("At %d:%d: %s", line, column, msg));
 	}
 }

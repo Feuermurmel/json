@@ -3,7 +3,6 @@ package ch.feuermurmel.json.binary;
 import ch.feuermurmel.json.*;
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.*;
 
 public class BinaryJson {
 	static final int tagIgnored = 0;
