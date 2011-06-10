@@ -42,13 +42,14 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	 <p/>
 	 This will use a very compact representation with minimal whitespace. Use {@link #prettyPrint()} to get a wrapped and indented string representation.
 	 */
+	@SuppressWarnings({ "DesignForExtension" })
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 
 		try {
 			toString(builder);
 		} catch (IOException e) {
-			throw new RuntimeException(e); // should never happen ...
+			throw new RuntimeException(e); // should never happen, as we're writing into a StringBuilder
 		}
 
 		return builder.toString();
@@ -57,6 +58,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	/**
 	 Write this object as a JSON document to an instance of {@code Appendable} like {@link StringBuilder} or {@link OutputStreamWriter}.
 	 */
+	@SuppressWarnings({ "DesignForExtension" })
 	public void toString(Appendable dest) throws IOException {
 		dest.append(toString());
 	}
@@ -66,6 +68,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 
 	 @throws UnsupportedTypeException when this object is not an instance of {@link JsonBoolean}.
 	 */
+	@SuppressWarnings({ "DesignForExtension" })
 	public boolean asBoolean() {
 		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to boolean!");
 	}
@@ -75,6 +78,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 
 	 @throws UnsupportedTypeException when this object is not an instance of {@link JsonNumber}.
 	 */
+	@SuppressWarnings({ "DesignForExtension" })
 	public long asLong() {
 		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to long!");
 	}
@@ -93,6 +97,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 
 	 @throws UnsupportedTypeException when this object is not an instance of {@link JsonNumber}.
 	 */
+	@SuppressWarnings({ "DesignForExtension" })
 	public double asDouble() {
 		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to double!");
 	}
@@ -111,6 +116,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 
 	 @throws UnsupportedTypeException when this object is not an instance of {@link JsonString}.
 	 */
+	@SuppressWarnings({ "DesignForExtension" })
 	public String asString() {
 		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a String!");
 	}
@@ -120,6 +126,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 
 	 @throws UnsupportedTypeException when this object is not an instance of {@link JsonString}.
 	 */
+	@SuppressWarnings({ "DesignForExtension" })
 	public JsonList asList() {
 		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a List!");
 	}
@@ -129,6 +136,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 
 	 @throws UnsupportedTypeException when this object is not an instance of {@link JsonMap}.
 	 */
+	@SuppressWarnings({ "DesignForExtension" })
 	public JsonMap asMap() {
 		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a Map!");
 	}
@@ -140,6 +148,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	 <p/>
 	 {@code System.out.println(obj.prettyPrint.format("\t", 12))}
 	 */
+	@SuppressWarnings({ "DesignForExtension" })
 	public PrettyPrint prettyPrint() {
 		return new PrettyPrint.Atom(toString());
 	}

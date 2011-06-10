@@ -10,9 +10,9 @@ public final class Json {
 	}
 
 	/**
-	 Creates a new, empty JsonList.
-	 This method is useful when used in a way like this:
-	 {@code JsonList list = Json.list().add(1).add(2).add("three");}
+	 Shortcut for {@link JsonList.create()}.
+	 Returns a new, empty JsonList. Useful using a static import for this class. This method is useful when used in a way like this:
+	 {@code JsonList list = list().add(1).add(2).add("three");}
 
 	 @return a new, empty JsonList.
 	 */
@@ -21,9 +21,9 @@ public final class Json {
 	}
 
 	/**
-	 Creates a new, empty JsonMap.
-	 This method is useful when used in a way like this:
-	 <code>JsonMap map = Json.map().add("one", 1).add("two", 2);</code>
+	 Shortcut for {@link JsonMap.create()}.
+	 Returns a new, empty JsonMap. Useful using a static import for this class. This method is useful when used in a way like this:
+	 <code>JsonMap map = map().add("one", 1).add("two", 2);</code>
 
 	 @return a new, empty JsonList.
 	 */
