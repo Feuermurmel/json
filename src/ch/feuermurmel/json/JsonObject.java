@@ -2,6 +2,7 @@ package ch.feuermurmel.json;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.ByteBuffer;
 
 /**
  Super class of all classes implementing the different JSON datatypes.
@@ -18,6 +19,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	 <p/>
 	 Overrides {@link Object#equals(Object)}
 	 */
+	@Override
 	public abstract boolean equals(Object obj);
 
 	/**
@@ -25,23 +27,15 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	 <p/>
 	 Overrides {@link Object#hashCode()}
 	 */
-	public abstract int hashCode();
-
-	/**
-	 Return a JsonObject with same content as this one.
-	 <p/>
-	 Instances of mutable JSON classes will be deep-cloned, while instances of immutable classes this will return their own instance.
-	 <p/>
-	 Overrides {@link Object#clone()}
-	 */
 	@Override
-	public abstract JsonObject clone();
+	public abstract int hashCode();
 
 	/**
 	 Return the JSON object in it's string representation.
 	 <p/>
 	 This will use a very compact representation with minimal whitespace. Use {@link #prettyPrint()} to get a wrapped and indented string representation.
 	 */
+	@Override
 	@SuppressWarnings({ "DesignForExtension" })
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -63,6 +57,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 		dest.append(toString());
 	}
 
+	// FIXME: `convert' is misleading
 	/**
 	 Convert this JSON object to a Java boolean.
 
@@ -139,6 +134,19 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	@SuppressWarnings({ "DesignForExtension" })
 	public JsonMap asMap() {
 		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a Map!");
+	}
+
+	/**
+	 Return a JsonObject with same content as this one.
+	 <p/>
+	 Instances of mutable JSON classes will be deep-cloned, while instances of immutable classes this will return their own instance.
+	 <p/>
+	 Overrides {@link Object#clone()}
+	 */
+	@SuppressWarnings({ "DesignForExtension" })
+	@Override
+	public JsonObject clone() {
+		return this;
 	}
 
 	/**
