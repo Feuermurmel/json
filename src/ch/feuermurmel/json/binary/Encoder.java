@@ -22,7 +22,7 @@ final class Encoder {
 		} else if (obj instanceof JsonBoolean) {
 			writeBoolean(obj.asBoolean());
 		} else if (obj instanceof JsonNumber) {
-			if (((JsonNumber) obj).isInteger())
+			if (((JsonNumber) obj).isIntegral())
 				writeLong(obj.asLong());
 			else
 				writeDouble(obj.asDouble());
