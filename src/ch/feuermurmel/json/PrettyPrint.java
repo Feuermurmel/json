@@ -15,12 +15,8 @@ import java.util.ArrayList;
 public abstract class PrettyPrint {
 	private Format format = defaultFormat;
 
-	private static final Format defaultFormat = new Format(7, "\t", "\n");
-
 	protected abstract int numNodes();
-
 	protected abstract boolean isSimple();
-	
 	protected abstract void toString(String indent, int numPrefix, Format format, Appendable dest) throws IOException;
 
 	/**
@@ -59,7 +55,7 @@ public abstract class PrettyPrint {
 		try {
 			toString(builder);
 		} catch (IOException e) {
-			throw new RuntimeException(e); // should not happen
+			throw new RuntimeException(e); // Should not happen, as we're writing to a StringBuilder
 		}
 
 		return builder.toString();
@@ -71,6 +67,8 @@ public abstract class PrettyPrint {
 	public final void toString(Appendable dest) throws IOException {
 		toString("", 0, format, dest);
 	}
+	
+	private static final Format defaultFormat = new Format(7, "\t", "\n");
 
 	private static final class Format {
 		public final int maxNodesPerLine;
