@@ -71,7 +71,7 @@ public abstract class JsonNumber extends JsonObject {
 			return String.valueOf(value);
 		}
 
-		@SuppressWarnings({ "FloatingPointEquality" })
+		@SuppressWarnings("FloatingPointEquality")
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof Long)
@@ -121,7 +121,7 @@ public abstract class JsonNumber extends JsonObject {
 			return String.valueOf(value);
 		}
 
-		@SuppressWarnings({ "FloatingPointEquality" })
+		@SuppressWarnings("FloatingPointEquality")
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof Double)

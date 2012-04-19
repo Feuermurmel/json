@@ -11,7 +11,7 @@ import java.util.ArrayList;
  <p/>
  {@link #toString()} will convert the original {@code JsonObject} to a string using the set formating parameters.
  */
-@SuppressWarnings({ "JavaDoc" })
+@SuppressWarnings("JavaDoc")
 public abstract class PrettyPrint {
 	private Format format = defaultFormat;
 
