@@ -102,7 +102,7 @@ public final class Json {
 	 @return the parsed {@link JsonObject}.
 	 @throws JsonParseException if invalid syntax is encountered.
 	 */
-	public static JsonObject parse(String input) {
+	public static JsonObject parse(String input) throws JsonParseException {
 		try {
 			return new Parser(new StringReader(input)).result;
 		} catch (IOException e) {
@@ -118,7 +118,7 @@ public final class Json {
 	 @return the parsed {@link JsonObject}.
 	 @throws JsonParseException if invalid syntax is encountered.
 	 */
-	public static JsonObject parse(Reader input) throws IOException {
+	public static JsonObject parse(Reader input) throws IOException, JsonParseException {
 		return new Parser(input).result;
 	}
 }

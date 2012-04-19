@@ -22,7 +22,7 @@ final class Lexer {
 	// next character that will bre returned by useChar() etc. Set to -1 after the last character's been used.
 	private int nextChar = -1;
 
-	public Lexer(Reader input) throws IOException {
+	public Lexer(Reader input) throws IOException, JsonParseException {
 		this.input = input;
 
 		nextChar = readChar();
@@ -30,7 +30,7 @@ final class Lexer {
 	}
 
 	// read token and move to the next
-	public Token useToken() throws IOException {
+	public Token useToken() throws IOException, JsonParseException {
 		Token res = nextToken;
 		
 		nextToken = readToken();
@@ -44,7 +44,7 @@ final class Lexer {
 	}
 
 	// parse one token including it's leading whitespace
-	private Token readToken() throws IOException {
+	private Token readToken() throws IOException, JsonParseException {
 		while (testChar(' ') || testChar('\t') || testChar('\n'))
 			useChar();
 
@@ -94,9 +94,11 @@ final class Lexer {
 			while (!testChar('\"')) {
 				if (isEOF())
 					throw new JsonParseException(currentLine, currentColumn, "EOF inside string");
-				else if (testControlChar())
+				
+				if (testControlChar())
 					throw new JsonParseException(currentLine, currentColumn, "Invalid control character");
-				else if (testChar('\\'))
+				
+				if (testChar('\\'))
 					useChar();
 
 				useChar();
@@ -139,7 +141,7 @@ final class Lexer {
 	}
 
 	// reads characters from a keyword token, and eats them. throws an exception if the keyword does not match.
-	private Token keywordToken(TokenType type, String keyword) throws IOException {
+	private Token keywordToken(TokenType type, String keyword) throws IOException, JsonParseException {
 		int length = keyword.length();
 
 		// we skip testing the frist character as we wouldn't be here it it didn't match 

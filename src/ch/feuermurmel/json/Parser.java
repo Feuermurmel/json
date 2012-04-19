@@ -8,7 +8,7 @@ final class Parser {
 
 	private final Lexer lexer;
 
-	public Parser(Reader input) throws IOException {
+	public Parser(Reader input) throws IOException, JsonParseException {
 		lexer = new Lexer(input);
 
 		result = parse();
@@ -17,13 +17,13 @@ final class Parser {
 			throw problemUnexpectedToken("end of file");
 	}
 
-	private JsonParseException problemUnexpectedToken(String expected) throws IOException {
+	private JsonParseException problemUnexpectedToken(String expected) throws IOException, JsonParseException {
 		Lexer.Token token = lexer.useToken();
 
 		return new JsonParseException(token.line, token.column, "Expected " + expected);
 	}
 	
-	private static String parseString(Lexer.Token token) {
+	private static String parseString(Lexer.Token token) throws JsonParseException {
 		StringBuilder res = new StringBuilder();
 		String string = token.match;
 		int pos = 1; // skip leading "
@@ -65,7 +65,7 @@ final class Parser {
 		return res.toString();
 	}
 
-	private JsonObject parse() throws IOException {
+	private JsonObject parse() throws IOException, JsonParseException {
 		if (lexer.testToken(Lexer.TokenType.Null)) {
 			lexer.useToken();
 			return JsonNull.instance();
