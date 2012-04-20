@@ -51,7 +51,7 @@ public final class Json {
 
 		// special null treatment
 		if (obj == null)
-			return JsonNull.instance();
+			return JsonNull.instance;
 
 		// booleans
 		if (obj instanceof Boolean)

@@ -68,7 +68,7 @@ final class Parser {
 	private JsonObject parse() throws IOException, JsonParseException {
 		if (lexer.testToken(Lexer.TokenType.Null)) {
 			lexer.useToken();
-			return JsonNull.instance();
+			return JsonNull.instance;
 		} else if (lexer.testToken(Lexer.TokenType.False)) {
 			lexer.useToken();
 			return JsonBoolean.instance(false);
