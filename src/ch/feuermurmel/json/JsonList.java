@@ -72,6 +72,19 @@ public final class JsonList extends JsonObject implements Iterable<JsonObject> {
 		return data.get(index);
 	}
 
+	/**
+	 Same as {@link #get(int)} but returns a default value if the index is out of range.
+
+	 @param index Index of the element to return.
+	 @param def Value to return if the index is out of range.
+	 */
+	public JsonObject get(int index, JsonObject def) {
+		if (0 <= index && index < data.size())
+			return data.get(index);
+		else
+			return def;
+	}
+
 	/** Number of elements in this list. */
 	public int size() {
 		return data.size();
