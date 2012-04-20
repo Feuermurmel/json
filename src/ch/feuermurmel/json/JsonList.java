@@ -154,7 +154,13 @@ public final class JsonList extends JsonObject implements Iterable<JsonObject> {
 		return new JsonList();
 	}
 
-	/** Create and return a {@code JsonList} and initialize with the contents of {@code contents}. */
+	/**
+	 Create and return a {@code JsonList} and initialize with the contents of the specified sequence.
+	 <p/>
+	 Each value will be converted by {@link Json#convert(Object)}
+
+	 @param content Sequence to use the values from.
+	 */
 	public static JsonList create(Iterable<?> content) {
 		JsonList list = new JsonList();
 

@@ -48,6 +48,11 @@ public final class JsonBoolean extends JsonObject {
 	private static final JsonBoolean falseInstance = new JsonBoolean(false);
 	private static final JsonBoolean trueInstance = new JsonBoolean(true);
 
+	/**
+	 Returns an instance of this calss with the specified boolean value.
+
+	 @param value Boolean value to encapsulate.
+	 */
 	public static JsonBoolean instance(boolean value) {
 		return value ? trueInstance : falseInstance;
 	}

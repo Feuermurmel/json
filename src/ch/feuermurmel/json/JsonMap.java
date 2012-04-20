@@ -14,9 +14,9 @@ import java.util.*;
  */
 public final class JsonMap extends JsonObject implements Iterable<String> {
 	private final Map<String, JsonObject> data = new LinkedHashMap<String, JsonObject>();
-	
+
 	private JsonMap() { }
-	
+
 	/**
 	 Adds or replaces a value for the given key.
 	 <p/>

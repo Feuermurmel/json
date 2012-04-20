@@ -18,7 +18,7 @@ public abstract class JsonNumber extends JsonObject {
 	}
 
 	/**
-	 Return whether this {@link JsonNumber} contains an integral value.
+	 Return whether this {@code JsonNumber} contains an integral value.
 
 	 @returns {@code true} if the JSON number is internaly represented by a long, false if the JSON number is internaly represented by a double.
 	 */
@@ -27,7 +27,7 @@ public abstract class JsonNumber extends JsonObject {
 	/**
 	 Create a JsonNumber using an integral value.
 
-	 @param value Value of the new {@link JsonNumber}.
+	 @param value Value of the new {@code JsonNumber}.
 	 */
 	public static JsonNumber instance(long value) {
 		return new Long(value);
@@ -36,7 +36,7 @@ public abstract class JsonNumber extends JsonObject {
 	/**
 	 Create a JsonNumber using an integral value.
 
-	 @param value Value of the new {@link JsonNumber}.
+	 @param value Value of the new {@code JsonNumber}.
 	 */
 	public static JsonNumber instance(double value) {
 		return new Double(value);

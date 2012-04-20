@@ -42,7 +42,12 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 		return builder.toString();
 	}
 
-	/** Write this object as a JSON document to an instance of {@code Appendable} like {@link StringBuilder} or {@link OutputStreamWriter}. */
+	/**
+	 Write this object as a JSON document.
+
+	 @param dest Instance of {@link Appendable}, like {@link StringBuilder} or {@link OutputStreamWriter}, to write the JSON document to.
+	 @throws IOException Thrown by the {@link Appendable}
+	 */
 	@SuppressWarnings("DesignForExtension")
 	public void toString(Appendable dest) throws IOException {
 		dest.append(toString());
