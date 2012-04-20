@@ -37,6 +37,7 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 	 Get the value for the specified key.
 
 	 @param k Key that maps to the returned value.
+	 @throws IllegalArgumentException if the key is not in the map.
 	 */
 	public JsonObject get(String k) {
 		JsonObject res = data.get(k);
@@ -70,12 +71,12 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 		return this;
 	}
 
-	/** returns whether the map contains a mapping with the specified key. */
+	/** Returns whether the map contains a mapping with the specified key. */
 	public boolean has(String k) {
 		return data.containsKey(k);
 	}
 
-	/** Number of key-value-pais in the map. */
+	/** Number of key-value-pairs in the map. */
 	public int size() {
 		return data.size();
 	}
@@ -110,7 +111,7 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 			JsonString.instance(i.getKey()).toString(dest);
 			dest.append(":");
 			i.getValue().toString(dest);
-			
+
 			sep = ",";
 		}
 
@@ -140,16 +141,13 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 		return res;
 	}
 
-	/**
-	 Create and return an empty {@code JsonMap}.
-	 */
+	/** Create and return an empty {@code JsonMap}. */
 	public static JsonMap create() {
 		return new JsonMap();
 	}
 
-	/**
-	 Create and return a {@code JsonList} and initialize with the contents of {@code contents}.
-	 */
+	/** Create and return a {@code JsonList} and initialize with the contents of {@code contents}. */
+	// FIXME: Keys that are instances of JsonString will have quotes added before being used as keys in this JsonMap
 	public static JsonMap create(Map<?, ?> content) {
 		JsonMap map = new JsonMap();
 

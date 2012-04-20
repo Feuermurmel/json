@@ -67,6 +67,7 @@ public final class JsonList extends JsonObject implements Iterable<JsonObject> {
 	 Get the object at the specified index.
 
 	 @param index Index of the element to return.
+	 @throws IndexOutOfBoundsException if the index is out of range.
 	 */
 	public JsonObject get(int index) {
 		return data.get(index);
@@ -148,22 +149,18 @@ public final class JsonList extends JsonObject implements Iterable<JsonObject> {
 		return res;
 	}
 
-	/**
-	 Create and return an empty {@code JsonList}.
-	 */
+	/** Create and return an empty {@code JsonList}. */
 	public static JsonList create() {
 		return new JsonList();
 	}
 
-	/**
-	 Create and return a {@code JsonList} and initialize with the contents of {@code contents}.
-	 */
+	/** Create and return a {@code JsonList} and initialize with the contents of {@code contents}. */
 	public static JsonList create(Iterable<?> content) {
 		JsonList list = new JsonList();
-		
+
 		for (Object i : content)
 			list.add(i);
-		
+
 		return list;
 	}
 }

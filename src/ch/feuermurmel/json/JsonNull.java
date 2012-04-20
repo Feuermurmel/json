@@ -27,6 +27,6 @@ public final class JsonNull extends JsonObject {
 	public JsonNull clone() {
 		return this;
 	}
-	
+
 	public static final JsonNull instance = new JsonNull();
 }

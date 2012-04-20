@@ -1,14 +1,15 @@
 package ch.feuermurmel.json.binary;
 
-import ch.feuermurmel.json.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.feuermurmel.json.*;
+
 final class Decoder {
 	private final DataInputStream input;
 	private final List<JsonObject> savedObjects = new ArrayList<JsonObject>();
-	
+
 	public Decoder(InputStream input) {
 		this.input = new DataInputStream(input);
 	}
@@ -26,9 +27,9 @@ final class Decoder {
 			return Json.convert(readDouble());
 		} else if (tag == BinaryJson.tagSaveAndUseObject) {
 			JsonObject obj = readObject();
-			
+
 			savedObjects.add(obj);
-			
+
 			return obj;
 		} else if (tag == BinaryJson.tagIncrementalList) {
 			return readIncrementalList();
@@ -37,7 +38,7 @@ final class Decoder {
 		} else {
 			int prefix = BinaryJson.prefixMask & tag;
 			int size = ~BinaryJson.prefixMask & tag;
-			
+
 			if (prefix == BinaryJson.prefixUseSavedObject) {
 				return savedObjects.get((int) readSize(size)).clone();
 			} else if (prefix == BinaryJson.prefixPositiveInteger) {
@@ -46,9 +47,9 @@ final class Decoder {
 				return Json.convert(readNegativeLong(size));
 			} else if (prefix == BinaryJson.prefixString) {
 				byte[] bytes = new byte[(int) readSize(size)];
-				
+
 				input.readFully(bytes);
-				
+
 				return Json.convert(new String(bytes, BinaryJson.charset));
 			} else if (prefix == BinaryJson.prefixList) {
 				return readList(size);
@@ -66,7 +67,7 @@ final class Decoder {
 
 		for (int i = 0; i < length; i += 1) {
 			String key = readObject().asString();
-			
+
 			map.put(key, readObject());
 		}
 
@@ -79,7 +80,7 @@ final class Decoder {
 
 		for (int i = 0; i < length; i += 1)
 			list.add(readObject());
-		
+
 		return list;
 	}
 
@@ -111,7 +112,7 @@ final class Decoder {
 		} else {
 			long value;
 			long mask;
-			
+
 			if (size == BinaryJson.size8Bit) {
 				value = input.readByte();
 				mask = BinaryJson.integerMask8Bit;
@@ -137,13 +138,13 @@ final class Decoder {
 
 	private JsonObject readIncrementalList() throws IOException {
 		JsonList list = Json.list();
-		
+
 		while (true) {
 			JsonObject obj = readObject();
-			
+
 			if (obj == null)
 				return list;
-			
+
 			list.add(obj);
 		}
 	}
@@ -155,7 +156,7 @@ final class Decoder {
 	private int readTag() throws IOException {
 		while (true) {
 			int tag = input.readByte() & (1 << 8) - 1;
-			
+
 			if (tag == BinaryJson.tagSaveObject) {
 				savedObjects.add(readObject());
 			} else if (tag != BinaryJson.tagIgnored) {

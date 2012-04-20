@@ -32,9 +32,9 @@ final class Lexer {
 	// read token and move to the next
 	public Token useToken() throws IOException, JsonParseException {
 		Token res = nextToken;
-		
+
 		nextToken = readToken();
-		
+
 		return res;
 	}
 
@@ -72,13 +72,13 @@ final class Lexer {
 
 			startToken();
 			useChar();
-			
+
 			while (true) {
 				if (testChar('.') || testChar('e') || testChar('E'))
 					isFloat = true;
 				else if (!testChar('0', '9') && !testChar('-'))
 					break;
-				
+
 				useChar();
 			}
 
@@ -94,10 +94,10 @@ final class Lexer {
 			while (!testChar('\"')) {
 				if (isEOF())
 					throw new JsonParseException(currentLine, currentColumn, "EOF inside string");
-				
+
 				if (testControlChar())
 					throw new JsonParseException(currentLine, currentColumn, "Invalid control character");
-				
+
 				if (testChar('\\'))
 					useChar();
 
@@ -136,7 +136,7 @@ final class Lexer {
 	private Token singleCharToken(TokenType type) throws IOException {
 		int line = currentLine;
 		int column = currentColumn;
-		
+
 		return new Token(type, String.valueOf(useChar()), line, column);
 	}
 

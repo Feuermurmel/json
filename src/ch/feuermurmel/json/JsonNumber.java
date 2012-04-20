@@ -13,17 +13,17 @@ public abstract class JsonNumber extends JsonObject {
 	public boolean equals(Object obj) {
 		if (obj instanceof JsonNumber)
 			return ((JsonObject) obj).asDouble() == asDouble();
-		
+
 		return false;
 	}
 
 	/**
 	 Return whether this {@link JsonNumber} contains an integral value.
-	 
+
 	 @returns {@code true} if the JSON number is internaly represented by a long, false if the JSON number is internaly represented by a double.
 	 */
 	public abstract boolean isIntegral();
-	
+
 	/**
 	 Create a JsonNumber using an integral value.
 
@@ -44,11 +44,11 @@ public abstract class JsonNumber extends JsonObject {
 
 	private static final class Long extends JsonNumber {
 		private final long value;
-		
+
 		private Long(long value) {
 			this.value = value;
 		}
-		
+
 		@Override
 		public boolean isIntegral() {
 			return true;
@@ -76,7 +76,7 @@ public abstract class JsonNumber extends JsonObject {
 		public boolean equals(Object obj) {
 			if (obj instanceof Long)
 				return ((Long) obj).value == value;
-				
+
 			return super.equals(obj);
 		}
 

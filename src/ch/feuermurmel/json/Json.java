@@ -10,8 +10,10 @@ public final class Json {
 	}
 
 	/**
-	 Shortcut for {@link JsonList#create()}.<p/>
-	 Returns a new, empty {@link JsonList}. Useful using a static import for this class. This method is useful when used in a way like this:<p/>
+	 Shortcut for {@link JsonList#create()}.
+	 <p/>
+	 Returns a new, empty {@link JsonList}. Useful using a static import for this class. This method is useful when used in a way like this:
+	 <p/>
 	 {@code JsonList list = list().add(1).add(2).add("three");}
 
 	 @return a new, empty JsonList.
@@ -21,8 +23,10 @@ public final class Json {
 	}
 
 	/**
-	 Shortcut for {@link JsonMap#create()}.<p/>
-	 Returns a new, empty {@link JsonMap}. Useful using a static import for this class. This method is useful when used in a way like this:<p/>
+	 Shortcut for {@link JsonMap#create()}.
+	 <p/>
+	 Returns a new, empty {@link JsonMap}. Useful using a static import for this class. This method is useful when used in a way like this:
+	 <p/>
 	 {@code JsonMap map = map().add("one", 1).add("two", 2);}
 
 	 @return a new, empty JsonList.
@@ -32,13 +36,20 @@ public final class Json {
 	}
 
 	/**
-	 This method either casts or converts an object to a subclass of {@link JsonObject}.<p/>
-	 If the passed object is a subclass of JsonObject it will be cast. If the object implements {@link JsonConvertible}, it's {@link JsonConvertible#toJson()} method wil be called. Other types will be converted according to this list:<p/>
-	 - {@code null} will be converted to {@link JsonNull}.<p/>
-	 - {@code boolean} and instances of {@code Boolean} will be converted to {@link JsonBoolean}.<p/>
-	 - {@code byte}, {@code short}, {@code int}, {@code long}, {@code float}, {@code double} and instances of their boxed variants will be converted to {@link JsonNumber}.<p/>
-	 - {@code char} and instances of {@code Character} and {@code String} will be converted to {@link JsonString}.<p/>
-	 - Instances of {@link Map} will be converted to {@link JsonMap}. Their keys will be converted using {@code toString()}, their values using this method.<p/>
+	 This method either casts or converts an object to a subclass of {@link JsonObject}.
+	 <p/>
+	 If the passed object is a subclass of JsonObject it will be cast. If the object implements {@link JsonConvertible}, it's {@link JsonConvertible#toJson()} method wil be called. Other types will be converted according to this list:
+	 <p/>
+	 - {@code null} will be converted to {@link JsonNull}.
+	 <p/>
+	 - {@code boolean} and instances of {@code Boolean} will be converted to {@link JsonBoolean}.
+	 <p/>
+	 - {@code byte}, {@code short}, {@code int}, {@code long}, {@code float}, {@code double} and instances of their boxed variants will be converted to {@link JsonNumber}.
+	 <p/>
+	 - {@code char} and instances of {@code Character} and {@code String} will be converted to {@link JsonString}.
+	 <p/>
+	 - Instances of {@link Map} will be converted to {@link JsonMap}. Their keys will be converted using {@code toString()}, their values using this method.
+	 <p/>
 	 - Instances of {@link Iterable} will be converted to {@link List}. Their elements will be converted using this method.
 
 	 @param obj The object to convert.
@@ -95,7 +106,8 @@ public final class Json {
 	}
 
 	/**
-	 Parse a JSON document into a {@link JsonObject}.<p/>
+	 Parse a JSON document into a {@link JsonObject}.
+	 <p/>
 	 Will parse the document according to the JSON document syntax. Can also be used on the output of {@link JsonObject#toString()} or {@link JsonObject#prettyPrint()}.
 
 	 @param input The string to parse. May contain leading or trailing whitespace.
@@ -111,12 +123,14 @@ public final class Json {
 	}
 
 	/**
-	 Parse a JSON document read from a {@link Reader}.<p/>
+	 Parse a JSON document read from a {@link Reader}.
+	 <p/>
 	 Currently, the stream has to end after the document or parsing will fail.
 
 	 @param input Source to read from, e.g. an {@link InputStreamReader}.
 	 @return the parsed {@link JsonObject}.
 	 @throws JsonParseException if invalid syntax is encountered.
+	 @throws IOException it the passed {@code Reader} throws an {@code IOException}.
 	 */
 	public static JsonObject parse(Reader input) throws IOException, JsonParseException {
 		return new Parser(input).result;

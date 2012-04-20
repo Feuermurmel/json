@@ -29,7 +29,7 @@ public final class JsonString extends JsonObject {
 	@Override
 	public void toString(Appendable dest) throws IOException {
 		dest.append("\"");
-		
+
 		for (int i = 0; i < value.length(); i += 1) {
 			char c = value.charAt(i);
 
@@ -67,7 +67,7 @@ public final class JsonString extends JsonObject {
 	public JsonString clone() {
 		return this;
 	}
-	
+
 	public static JsonString instance(String value) {
 		return new JsonString(value);
 	}

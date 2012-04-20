@@ -2,7 +2,6 @@ package ch.feuermurmel.json;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.ByteBuffer;
 
 /**
  Super class of all classes implementing the different JSON datatypes.
@@ -16,17 +15,11 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	 Compare this JSON object to another JSON object.
 	 <p/>
 	 The passed object will not converted to a JSON object, so only an object of the same class will compare equal.
-	 <p/>
-	 Overrides {@link Object#equals(Object)}
 	 */
 	@Override
 	public abstract boolean equals(Object obj);
 
-	/**
-	 Return the hash code of this JSON object.
-	 <p/>
-	 Overrides {@link Object#hashCode()}
-	 */
+	/** Return the hash code of this JSON object. */
 	@Override
 	public abstract int hashCode();
 
@@ -49,17 +42,14 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 		return builder.toString();
 	}
 
-	/**
-	 Write this object as a JSON document to an instance of {@code Appendable} like {@link StringBuilder} or {@link OutputStreamWriter}.
-	 */
+	/** Write this object as a JSON document to an instance of {@code Appendable} like {@link StringBuilder} or {@link OutputStreamWriter}. */
 	@SuppressWarnings("DesignForExtension")
 	public void toString(Appendable dest) throws IOException {
 		dest.append(toString());
 	}
 
-	// FIXME: `convert' is misleading
 	/**
-	 Convert this JSON object to a Java boolean.
+	 Return the value of an instance of {@link JsonBoolean} as a {@code boolean}.
 
 	 @throws UnsupportedTypeException when this object is not an instance of {@link JsonBoolean}.
 	 */
@@ -69,7 +59,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	}
 
 	/**
-	 Convert this JSON object to a Java long.
+	 Return the value of an instance of {@link JsonNumber} as a {@code long}.
 
 	 @throws UnsupportedTypeException when this object is not an instance of {@link JsonNumber}.
 	 */
@@ -79,7 +69,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	}
 
 	/**
-	 Convert this JSON object to a Java int.
+	 Return the value of an instance of {@link JsonNumber} as an {@code int}. This will truncate values that are out of range.
 
 	 @throws UnsupportedTypeException when this object is not an instance of {@link JsonNumber}.
 	 */
@@ -88,7 +78,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	}
 
 	/**
-	 Convert this JSON object to a Java double.
+	 Return the value of an instance of {@link JsonNumber} as a {@code double}.
 
 	 @throws UnsupportedTypeException when this object is not an instance of {@link JsonNumber}.
 	 */
@@ -98,7 +88,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	}
 
 	/**
-	 Convert this JSON object to a Java float.
+	 Return the value of an instance of {@link JsonNumber} as a {@code float}. This will truncate {@link JsonNumber} values that are out of range.
 
 	 @throws UnsupportedTypeException when this object is not an instance of {@link JsonNumber}.
 	 */
@@ -107,7 +97,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	}
 
 	/**
-	 Convert this JSON object to a Java String.
+	 Return the value of an instance of {@link JsonString} as a {@link String}.
 
 	 @throws UnsupportedTypeException when this object is not an instance of {@link JsonString}.
 	 */
@@ -117,7 +107,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	}
 
 	/**
-	 Cast this JSON object to a {@link JsonString}.
+	 Cast this JSON object to a {@link JsonList}.
 
 	 @throws UnsupportedTypeException when this object is not an instance of {@link JsonString}.
 	 */
@@ -127,7 +117,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	}
 
 	/**
-	 Convert this JSON object to a {@link JsonMap}.
+	 Cast this JSON object to a {@link JsonMap}.
 
 	 @throws UnsupportedTypeException when this object is not an instance of {@link JsonMap}.
 	 */
@@ -139,9 +129,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	/**
 	 Return a JsonObject with same content as this one.
 	 <p/>
-	 Instances of mutable JSON classes will be deep-cloned, while instances of immutable classes this will return their own instance.
-	 <p/>
-	 Overrides {@link Object#clone()}
+	 Instances of mutable JSON classes will be deep-cloned, while instances of immutable classes this will return themselves instance.
 	 */
 	@SuppressWarnings("DesignForExtension")
 	@Override

@@ -1,9 +1,10 @@
 package ch.feuermurmel.json.binary;
 
-import ch.feuermurmel.json.*;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+
+import ch.feuermurmel.json.*;
 
 import static ch.feuermurmel.json.binary.BinaryJson.*;
 
@@ -15,7 +16,7 @@ final class Encoder {
 	public Encoder(OutputStream output) {
 		this.output = new DataOutputStream(output);
 	}
-	
+
 	public void writeObject(JsonObject obj) throws IOException {
 		if (obj instanceof JsonNull) {
 			writeTag(tagNull);
@@ -39,7 +40,7 @@ final class Encoder {
 
 	private void writeMap(JsonMap obj) throws IOException {
 		writeSize(prefixMap, obj.size());
-		
+
 		for (String i : obj) {
 			writeSavedObject(JsonString.instance(i));
 			writeObject(obj.get(i));
@@ -48,18 +49,18 @@ final class Encoder {
 
 	private void writeList(JsonList obj) throws IOException {
 		writeSize(prefixList, obj.size());
-		
+
 		for (JsonObject i : obj)
 			writeObject(i);
 	}
-	
+
 	private void writeSavedObject(JsonObject value) throws IOException {
 		Integer id = savedObjects.get(value);
 
 		if (id == null) {
 			savedObjects.put(value, nextSavedObjectId);
 			nextSavedObjectId += 1;
-			
+
 			writeTag(tagSaveAndUseObject);
 			writeObject(value);
 		} else {
@@ -69,7 +70,7 @@ final class Encoder {
 
 	private void writeString(String value) throws IOException {
 		byte[] bytes = value.getBytes(charset);
-		
+
 		writeSize(prefixString, bytes.length);
 		output.write(bytes);
 	}
@@ -83,7 +84,7 @@ final class Encoder {
 
 	private void writeSize(int prefix, long value) throws IOException {
 		long tagValue = value < 0 ? ~value : value;
-		
+
 		// this MAY work ...
 		if (tagValue < 24) {
 			output.writeByte(prefix + (byte) value + (value < 0 ? 24 : 0));

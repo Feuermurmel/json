@@ -16,7 +16,9 @@ public abstract class PrettyPrint {
 	private Format format = defaultFormat;
 
 	protected abstract int numNodes();
+
 	protected abstract boolean isSimple();
+
 	protected abstract void toString(String indent, int numPrefix, Format format, Appendable dest) throws IOException;
 
 	/**
@@ -46,9 +48,7 @@ public abstract class PrettyPrint {
 		return format(format.maxNodesPerLine, lineIndent, lineSepparator);
 	}
 
-	/**
-	 Convert the formatted {@code JsonObject} to a string.
-	 */
+	/** Convert the formatted {@code JsonObject} to a string. */
 	public final String toString() {
 		StringBuilder builder = new StringBuilder();
 
@@ -61,13 +61,11 @@ public abstract class PrettyPrint {
 		return builder.toString();
 	}
 
-	/**
-	 Write the formatted {@code JsonObject} to an instance of {@code Appendable} like {@link StringBuilder} or {@link OutputStreamWriter}.
-	 */
+	/** Write the formatted {@code JsonObject} to an instance of {@code Appendable} like {@link StringBuilder} or {@link OutputStreamWriter}. */
 	public final void toString(Appendable dest) throws IOException {
 		toString("", 0, format, dest);
 	}
-	
+
 	private static final Format defaultFormat = new Format(7, "\t", "\n");
 
 	private static final class Format {

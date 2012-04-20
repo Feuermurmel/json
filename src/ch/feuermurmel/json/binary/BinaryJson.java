@@ -1,8 +1,9 @@
 package ch.feuermurmel.json.binary;
 
-import ch.feuermurmel.json.*;
 import java.io.*;
 import java.nio.charset.Charset;
+
+import ch.feuermurmel.json.JsonObject;
 
 public class BinaryJson {
 	static final int tagIgnored = 0;
@@ -14,7 +15,7 @@ public class BinaryJson {
 	static final int tagSaveObject = 8;
 	static final int tagSaveAndUseObject = 9;
 	static final int tagIncrementalList = 9;
-//	static final int tagIncrementalByteStream = 9;
+	//	static final int tagIncrementalByteStream = 9;
 	static final int tagEndIncremental = 9;
 
 	static final int prefixMask = 7 << 5;
@@ -27,15 +28,15 @@ public class BinaryJson {
 	static final long integerMask16Bit = (1l << 16) - 1;
 	static final long integerMask32Bit = (1l << 32) - 1;
 	static final long integerMask64Bit = -1l;
-	
+
 	static final int prefixUseSavedObject = 1 << 5;
 	static final int prefixPositiveInteger = 2 << 5;
 	static final int prefixNegativeInteger = 3 << 5;
 	static final int prefixString = 4 << 5;
 	static final int prefixList = 5 << 5;
 	static final int prefixMap = 6 << 5;
-//	static final int prefixByteStream = 7 << 5;
-	
+	//	static final int prefixByteStream = 7 << 5;
+
 	static final Charset charset = Charset.forName("UTF-8");
 
 	private BinaryJson() {

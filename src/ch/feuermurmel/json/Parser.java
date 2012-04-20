@@ -22,7 +22,7 @@ final class Parser {
 
 		return new JsonParseException(token.line, token.column, "Expected " + expected);
 	}
-	
+
 	private static String parseString(Lexer.Token token) throws JsonParseException {
 		StringBuilder res = new StringBuilder();
 		String string = token.match;
@@ -77,7 +77,7 @@ final class Parser {
 			return JsonBoolean.instance(true);
 		} else if (lexer.testToken(Lexer.TokenType.Integer)) {
 			Lexer.Token token = lexer.useToken();
-			
+
 			try {
 				return JsonNumber.instance(Long.valueOf(token.match));
 			} catch (NumberFormatException ignored) {
