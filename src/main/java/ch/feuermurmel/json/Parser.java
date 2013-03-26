@@ -8,7 +8,7 @@ final class Parser {
 
 	private final Lexer lexer;
 
-	public Parser(Reader input) throws IOException, JsonParseException {
+	Parser(Reader input) throws IOException, JsonParseException {
 		lexer = new Lexer(input);
 
 		result = parse();

@@ -45,7 +45,7 @@ final class Lexer {
 
 	// parse one token including it's leading whitespace
 	private Token readToken() throws IOException, JsonParseException {
-		while (testChar(' ') || testChar('\t') || testChar('\n'))
+		while (testChar(' ') || testChar('\t') || testChar('\n') || testChar('\r'))
 			useChar();
 
 		if (testChar(',')) {
