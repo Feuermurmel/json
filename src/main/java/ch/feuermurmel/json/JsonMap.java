@@ -49,15 +49,15 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 	}
 
 	/**
-	 Same as {@link #get(String)} but returns a default value if the key is not in the map.
+	 Same as {@link #get(String)} but returns a default value if the key is not in the map. The default value will be converted to a {@link JsonObject} using {@link Json#convert(Object)} automatically, 
 
 	 @param k Key that maps to the returned value.
 	 @param def Value to return if the key is not in the map.
 	 */
-	public JsonObject get(String k, JsonObject def) {
+	public JsonObject get(String k, Object def) {
 		JsonObject res = data.get(k);
 
-		return res == null ? def : res;
+		return res == null ? Json.convert(def) : res;
 	}
 
 	/**

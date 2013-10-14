@@ -22,11 +22,11 @@ public final class JsonMapTest {
 		assertThat(map1.get("b"), equalTo(Json.convert(false)));
 		assertThat(map1.get("c"), equalTo(Json.convert(0)));
 		
-		assertThat(map1.get("a", Json.convert(true)), equalTo(Json.convert(null)));
-		assertThat(map1.get("b", Json.convert(true)), equalTo(Json.convert(false)));
-		assertThat(map1.get("c", Json.convert(true)), equalTo(Json.convert(0)));
+		assertThat(map1.get("a", true), equalTo(Json.convert(null)));
+		assertThat(map1.get("b", true), equalTo(Json.convert(false)));
+		assertThat(map1.get("c", true), equalTo(Json.convert(0)));
 		
-		assertThat(map1.get("d", Json.convert(true)), equalTo(Json.convert(true)));
+		assertThat(map1.get("d", true), equalTo(Json.convert(true)));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
