@@ -68,7 +68,7 @@ public final class JsonString extends JsonObject {
 		return this;
 	}
 
-	public static JsonString instance(String value) {
+	static JsonString instance(String value) {
 		return new JsonString(value);
 	}
 }

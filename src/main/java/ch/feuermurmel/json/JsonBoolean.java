@@ -53,7 +53,7 @@ public final class JsonBoolean extends JsonObject {
 
 	 @param value Boolean value to encapsulate.
 	 */
-	public static JsonBoolean instance(boolean value) {
+	static JsonBoolean instance(boolean value) {
 		return value ? trueInstance : falseInstance;
 	}
 }

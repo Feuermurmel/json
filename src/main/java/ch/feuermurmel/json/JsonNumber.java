@@ -29,7 +29,7 @@ public abstract class JsonNumber extends JsonObject {
 
 	 @param value Value of the new {@code JsonNumber}.
 	 */
-	public static JsonNumber instance(long value) {
+	static JsonNumber instance(long value) {
 		return new Long(value);
 	}
 
@@ -38,7 +38,7 @@ public abstract class JsonNumber extends JsonObject {
 
 	 @param value Value of the new {@code JsonNumber}.
 	 */
-	public static JsonNumber instance(double value) {
+	static JsonNumber instance(double value) {
 		return new Double(value);
 	}
 

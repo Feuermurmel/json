@@ -6,8 +6,8 @@ public class UnsupportedTypeException extends RuntimeException {
 		super(message);
 	}
 
-	public UnsupportedTypeException(String inputs, String type) {
-		this(String.format("Only objects of type %s can be converted to %s!", inputs, type));
+	public UnsupportedTypeException(String input, String type) {
+		this(String.format("Only objects of type %s can be converted to %s!", input, type));
 	}
 
 	public UnsupportedTypeException(String message, RuntimeException e) {

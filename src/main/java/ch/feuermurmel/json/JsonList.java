@@ -150,7 +150,7 @@ public final class JsonList extends JsonObject implements Iterable<JsonObject> {
 	}
 
 	/** Create and return an empty {@code JsonList}. */
-	public static JsonList create() {
+	static JsonList create() {
 		return new JsonList();
 	}
 
@@ -161,7 +161,7 @@ public final class JsonList extends JsonObject implements Iterable<JsonObject> {
 
 	 @param content Sequence to use the values from.
 	 */
-	public static JsonList create(Iterable<?> content) {
+	static JsonList create(Iterable<?> content) {
 		JsonList list = new JsonList();
 
 		for (Object i : content)

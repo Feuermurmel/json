@@ -142,13 +142,13 @@ public final class JsonMap extends JsonObject implements Iterable<String> {
 	}
 
 	/** Create and return an empty {@code JsonMap}. */
-	public static JsonMap create() {
+	static JsonMap create() {
 		return new JsonMap();
 	}
 
 	/** Create and return a {@code JsonList} and initialize with the contents of {@code contents}. */
 	// FIXME: Keys that are instances of JsonString will have quotes added before being used as keys in this JsonMap
-	public static JsonMap create(Map<?, ?> content) {
+	static JsonMap create(Map<?, ?> content) {
 		JsonMap map = new JsonMap();
 
 		for (Map.Entry<?, ?> i : content.entrySet())

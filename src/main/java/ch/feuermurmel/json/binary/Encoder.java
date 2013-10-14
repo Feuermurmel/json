@@ -6,6 +6,7 @@ import java.util.Map;
 
 import ch.feuermurmel.json.*;
 
+import static ch.feuermurmel.json.Json.convert;
 import static ch.feuermurmel.json.binary.BinaryJson.*;
 
 final class Encoder {
@@ -13,7 +14,7 @@ final class Encoder {
 	private final Map<JsonObject, Integer> savedObjects = new HashMap<JsonObject, Integer>();
 	private int nextSavedObjectId = 0;
 
-	public Encoder(OutputStream output) {
+	Encoder(OutputStream output) {
 		this.output = new DataOutputStream(output);
 	}
 
@@ -42,7 +43,7 @@ final class Encoder {
 		writeSize(prefixMap, obj.size());
 
 		for (String i : obj) {
-			writeSavedObject(JsonString.instance(i));
+			writeSavedObject(convert(i));
 			writeObject(obj.get(i));
 		}
 	}

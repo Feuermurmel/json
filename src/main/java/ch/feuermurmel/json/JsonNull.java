@@ -28,5 +28,5 @@ public final class JsonNull extends JsonObject {
 		return this;
 	}
 
-	public static final JsonNull instance = new JsonNull();
+	static final JsonNull instance = new JsonNull();
 }
