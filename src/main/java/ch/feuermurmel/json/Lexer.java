@@ -4,6 +4,7 @@ import java.io.*;
 
 final class Lexer {
 	private final Reader input;
+	private final String sourceInfo;
 
 	// line and column number of the character currently returned by useChar()
 	private int currentLine = 1;
@@ -22,15 +23,16 @@ final class Lexer {
 	// next character that will bre returned by useChar() etc. Set to -1 after the last character's been used.
 	private int nextChar = -1;
 
-	public Lexer(Reader input) throws IOException, JsonParseException {
+	Lexer(Reader input, String sourceInfo) throws IOException, JsonParseException {
 		this.input = input;
-
+		this.sourceInfo = sourceInfo;
+		
 		nextChar = readChar();
 		nextToken = readToken();
 	}
 
 	// read token and move to the next
-	public Token useToken() throws IOException, JsonParseException {
+	Token useToken() throws IOException, JsonParseException {
 		Token res = nextToken;
 
 		nextToken = readToken();
@@ -39,8 +41,20 @@ final class Lexer {
 	}
 
 	// test the type of the current token
-	public boolean testToken(TokenType type) {
+	boolean testToken(TokenType type) {
 		return nextToken.type == type;
+	}
+
+	JsonParseException createParseException(String message) {
+		return createParseException(currentLine, currentColumn, message);
+	}
+
+	JsonParseException createParseException(Token token, String message) {
+		return createParseException(token.line, token.column, message);
+	}
+
+	JsonParseException createParseException(int line, int column, String message) {
+		return JsonParseException.create(sourceInfo, line, column, message);
 	}
 
 	// parse one token including it's leading whitespace
@@ -92,11 +106,13 @@ final class Lexer {
 			useChar();
 
 			while (!testChar('\"')) {
-				if (isEOF())
-					throw new JsonParseException(currentLine, currentColumn, "EOF inside string");
+				if (isEOF()) {
+					String message = "EOF inside string";
+					throw createParseException(message);
+				}
 
 				if (testControlChar())
-					throw new JsonParseException(currentLine, currentColumn, "Invalid control character");
+					throw createParseException("Invalid control character");
 
 				if (testChar('\\'))
 					useChar();
@@ -110,12 +126,12 @@ final class Lexer {
 		} else if (isEOF()) {
 			return new Token(TokenType.EndOfFile, "", currentLine, currentColumn); // meaning there are no more tokens
 		} else if (testControlChar()) {
-			throw new JsonParseException(currentLine, currentColumn, "Invalid control character");
+			throw createParseException("Invalid control character");
 		} else {
-			throw new JsonParseException(currentLine, currentColumn, "Invalid token");
+			throw createParseException("Invalid token");
 		}
 	}
-
+	
 	// record line and column number and start token recording
 	private void startToken() {
 		tokenWriter = new StringWriter();
@@ -149,7 +165,7 @@ final class Lexer {
 
 		for (int i = 1; i < length; i += 1) {
 			if (!testChar(keyword.charAt(i)))
-				throw new JsonParseException(currentLine, currentColumn - i, "Invalid token"); // i hope we're safe with `currentColumn - i', multi-line keywords aren't that common ;-)
+				throw createParseException(currentLine, currentColumn - i, "Invalid token"); // i hope we're safe with `currentColumn - i', multi-line keywords aren't that common ;-)
 
 			useChar();
 		}
