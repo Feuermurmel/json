@@ -7,11 +7,10 @@ import java.util.ArrayList;
 /**
  This class is used to pretty-print a JsonObject.
  <p/>
- {@link JsonObject#prettyPrint()} returns an instance of this class. The different {@code format} methods can be used to specify line complexity before wrapping occrus and the string used for indenting.
+ {@link JsonObjectImpl#prettyPrint()} returns an instance of this class. The different {@code format} methods can be used to specify line complexity before wrapping occrus and the string used for indenting.
  <p/>
  {@link #toString()} will convert the original {@code JsonObject} to a string using the set formating parameters.
  */
-@SuppressWarnings("JavaDoc")
 public abstract class PrettyPrint {
 	private Format format = defaultFormat;
 
@@ -26,29 +25,30 @@ public abstract class PrettyPrint {
 
 	 @param maxNodesPerLine Maximum number of tokes on a line before line wrapping occurs.
 	 @param lineIndent String used to indent lines inside data structures.
-	 @param lineSepparator String used to sepparate lines.
+	 @param lineSeparator String used to sepparate lines.
 	 */
-	public final PrettyPrint format(int maxNodesPerLine, String lineIndent, String lineSepparator) {
-		format = new Format(maxNodesPerLine, lineIndent, lineSepparator);
+	public final PrettyPrint format(int maxNodesPerLine, String lineIndent, String lineSeparator) {
+		format = new Format(maxNodesPerLine, lineIndent, lineSeparator);
 		return this;
 	}
 
 	/** @see #format(int, String, String) */
 	public final PrettyPrint format(int maxNodesPerLine) {
-		return format(maxNodesPerLine, format.lineIndent, format.lineSepparator);
+		return format(maxNodesPerLine, format.lineIndent, format.lineSeparator);
 	}
 
 	/** @see #format(int, String, String) */
 	public final PrettyPrint format(String lineIndent) {
-		return format(format.maxNodesPerLine, lineIndent, format.lineSepparator);
+		return format(format.maxNodesPerLine, lineIndent, format.lineSeparator);
 	}
 
 	/** @see #format(int, String, String) */
-	public final PrettyPrint format(String lineIndent, String lineSepparator) {
-		return format(format.maxNodesPerLine, lineIndent, lineSepparator);
+	public final PrettyPrint format(String lineIndent, String lineSeparator) {
+		return format(format.maxNodesPerLine, lineIndent, lineSeparator);
 	}
 
 	/** Convert the formatted {@code JsonObject} to a string. */
+	@Override
 	public final String toString() {
 		StringBuilder builder = new StringBuilder();
 
@@ -71,12 +71,12 @@ public abstract class PrettyPrint {
 	private static final class Format {
 		public final int maxNodesPerLine;
 		public final String lineIndent;
-		public final String lineSepparator;
+		public final String lineSeparator;
 
-		private Format(int maxNodesPerLine, String lineIndent, String lineSepparator) {
+		private Format(int maxNodesPerLine, String lineIndent, String lineSeparator) {
 			this.maxNodesPerLine = maxNodesPerLine;
 			this.lineIndent = lineIndent;
-			this.lineSepparator = lineSepparator;
+			this.lineSeparator = lineSeparator;
 		}
 	}
 
@@ -190,12 +190,12 @@ public abstract class PrettyPrint {
 				String indentPlus = indent + format.lineIndent;
 				String sep = "";
 				for (PrettyPrint i : elements) {
-					dest.append(sep + format.lineSepparator + indentPlus);
+					dest.append(sep + format.lineSeparator + indentPlus);
 					i.toString(indentPlus, 0, format, dest);
 					sep = ",";
 				}
 
-				dest.append(format.lineSepparator + indent + suffix);
+				dest.append(format.lineSeparator + indent + suffix);
 			}
 		}
 	}

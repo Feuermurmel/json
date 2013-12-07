@@ -55,18 +55,18 @@ final class Parser {
 	private JsonObject parse() throws IOException, JsonParseException {
 		if (lexer.testToken(Lexer.TokenType.Null)) {
 			lexer.useToken();
-			return JsonNull.instance;
+			return JsonNullImpl.instance;
 		} else if (lexer.testToken(Lexer.TokenType.False)) {
 			lexer.useToken();
-			return JsonBoolean.instance(false);
+			return JsonBooleanImpl.instance(false);
 		} else if (lexer.testToken(Lexer.TokenType.True)) {
 			lexer.useToken();
-			return JsonBoolean.instance(true);
+			return JsonBooleanImpl.instance(true);
 		} else if (lexer.testToken(Lexer.TokenType.Integer)) {
 			Lexer.Token token = lexer.useToken();
 
 			try {
-				return JsonNumber.instance(Long.valueOf(token.match));
+				return JsonNumberImpl.instance(Long.valueOf(token.match));
 			} catch (NumberFormatException ignored) {
 				throw lexer.createParseException(token, "Invalid number literal.");
 			}
@@ -74,14 +74,14 @@ final class Parser {
 			Lexer.Token token = lexer.useToken();
 
 			try {
-				return JsonNumber.instance(Double.valueOf(token.match));
+				return JsonNumberImpl.instance(Double.valueOf(token.match));
 			} catch (NumberFormatException ignored) {
 				throw lexer.createParseException(token, "Invalid number literal.");
 			}
 		} else if (lexer.testToken(Lexer.TokenType.String)) {
-			return JsonString.instance(parseString(lexer.useToken()));
+			return JsonStringImpl.instance(parseString(lexer.useToken()));
 		} else if (lexer.testToken(Lexer.TokenType.OpenBracket)) {
-			JsonList list = JsonList.create();
+			JsonListImpl list = JsonListImpl.create();
 
 			lexer.useToken(); // [
 
@@ -102,7 +102,7 @@ final class Parser {
 
 			return list;
 		} else if (lexer.testToken(Lexer.TokenType.OpenBrace)) {
-			JsonMap map = JsonMap.create();
+			JsonMap map = JsonMapImpl.create();
 
 			lexer.useToken(); // {
 
