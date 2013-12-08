@@ -3,17 +3,14 @@ package ch.feuermurmel.json;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
- * Helper class for working with ch.feuermurmel.json.* instances and creating new instances.
+ * Helper class for creating {@link JsonObject} instances.
  */
 public final class Json {
 	private Json() {
 	}
-
-	// TODO: Overload this method with a vararg variant
 
 	/**
 	 * Shortcut for {@link JsonListImpl#create()}.
@@ -24,11 +21,13 @@ public final class Json {
 	 *
 	 * @return a new, empty JsonList.
 	 */
-	public static JsonListImpl list() {
+	public static JsonList list() {
 		return new JsonListImpl();
 	}
 
-	// TODO: Overload this method with a vararg variant
+	public static JsonList list(Object... elements) {
+		return convert(Arrays.asList(elements));
+	}
 
 	/**
 	 * Shortcut for {@link JsonMapImpl#create()}.
@@ -43,97 +42,172 @@ public final class Json {
 		return new JsonMapImpl();
 	}
 
-	// TODO: Overload this method with specific types
+	/**
+	 * Convert a {@code boolean} value to a JSON boolean.
+	 *
+	 * @param value The value to convert.
+	 */
+	public static JsonObject convert(boolean value) {
+		return value ? JsonBoolean.trueInstance : JsonBoolean.falseInstance;
+	}
+
+	/**
+	 * Convert a {@code long} value to an integral JSON number.
+	 *
+	 * @param value The value to convert.
+	 */
+	public static JsonObject convert(long value) {
+		return new JsonLong(value);
+	}
+
+	/**
+	 * Convert a {@code double} to a floating JSON number.
+	 *
+	 * @param value The value to convert.
+	 */
+	public static JsonObject convert(double value) {
+		return new JsonDouble(value);
+	}
+
+	/**
+	 * Convert a {@code char} to a single-character JSON string.
+	 *
+	 * @param value The value to convert.
+	 */
+	public static JsonObject convert(char value) {
+		return new JsonString(String.valueOf(value));
+	}
+
+	/**
+	 * Convert a {@link String} to a JSON string.
+	 *
+	 * @param value The value to convert.
+	 */
+	public static JsonObject convert(String value) {
+		return new JsonString(value);
+	}
+
+	/**
+	 * Convert a {@link List} to a JSON list.
+	 * <p/>
+	 * The entries will be converted using {@link #convert(Object)}.
+	 *
+	 * @param value The value to convert.
+	 */
+	public static JsonList convert(Iterable<?> value) {
+		JsonListImpl list = new JsonListImpl();
+
+		for (Object i : value)
+			list.add(i);
+
+		return list;
+	}
+
+	/**
+	 * Convert a {@link Map} to a JSON map.
+	 * <p/>
+	 * The values of the entries will be converted using {@link #convert(Object)}.
+	 *
+	 * @param value The value to convert.
+	 */
+	public static JsonMap convert(Map<String, ?> value) {
+		JsonMap map = new JsonMapImpl();
+
+		for (Map.Entry<String, ?> i : value.entrySet())
+			map.put(i.getKey(), i.getValue());
+
+		return map;
+	}
 
 	/**
 	 * This method either casts or converts an object to an implementation {@link JsonObject}.
 	 * <p/>
 	 * If the passed object is a subclass of JsonObject it will be cast. If the object implements {@link JsonConvertible}, it's {@link JsonConvertible#toJson()} method wil be called. Other types will be converted according to these rules:
 	 * <p/>
-	 * - {@code null} will be converted to {@link JsonNull}.
+	 * - {@code null} will be converted to {@link Json#NULL}.
 	 * <p/>
-	 * - {@code boolean} and instances of {@code Boolean} will be converted to a JSON boolean.
+	 * - Instances of {@link Boolean} will be converted using {@link #convert(boolean)}.
 	 * <p/>
-	 * - {@code byte}, {@code short}, {@code int}, {@code long} and instances of their boxed variants will be converted to an integral JSON number.
+	 * - Instances of {@link Byte}, {@link Short}, {@link Integer} and {@link Long} will be converted using {@link #convert(long)}.
 	 * <p/>
-	 * - {@code float}, {@code double} and instances of their boxed variants will be converted to a floating JSON number.
+	 * - Instances of {@link Float} and {@link Double} will be converted using {@link #convert(double)}.
 	 * <p/>
-	 * - {@code char} and instances of {@code Character} and {@code String} will be converted to {@link JsonString}.
+	 * - Instances of {@link Character} and {@link String} will be converted using {@link #convert(char)} and {@link #convert(String)}.
 	 * <p/>
-	 * - Instances of {@link Map} will be converted to a {@link JsonMap}. The values will be converted using this method. Only strings are allowed as keys.
+	 * - Instances of {@link Iterable} (e.g. {@link List}) will be converted using {@link #convert(Iterable)}.
 	 * <p/>
-	 * - Instances of {@link Iterable} will be converted to {@link List}. The elements will be converted using this method.
+	 * - Instances of {@link Map} will be converted similarly to {@link #convert(Map)}. In addition, keys are checked to be instances of {@link String}.
 	 *
-	 * @param obj The object to convert.
+	 * @param value The object to convert.
 	 *
 	 * @throws UnsupportedTypeException when the argument or any of it's members cannot be converted to a JsonObject.
 	 */
-	public static JsonObject convert(Object obj) {
+	public static JsonObject convert(Object value) {
 		// convertibles
-		if (obj instanceof JsonConvertible)
-			return ((JsonConvertible) obj).toJson();
+		if (value instanceof JsonConvertible)
+			return ((JsonConvertible) value).toJson();
 
 		// special null treatment
-		if (obj == null)
+		if (value == null)
 			return JsonNull.instance;
 
 		// booleans
-		if (obj instanceof Boolean)
-			return JsonBoolean.getInstance((Boolean) obj);
+		if (value instanceof Boolean)
+			return convert((boolean) value);
 
 		// numbers
-		if (obj instanceof Byte)
-			return new JsonLong((Byte) obj);
+		if (value instanceof Byte)
+			return convert((byte) value);
 
-		if (obj instanceof Short)
-			return new JsonLong((Short) obj);
+		if (value instanceof Short)
+			return convert((short) value);
 
-		if (obj instanceof Integer)
-			return new JsonLong((Integer) obj);
+		if (value instanceof Integer)
+			return convert((int) value);
 
-		if (obj instanceof Long)
-			return new JsonLong((Long) obj);
+		if (value instanceof Long)
+			return convert((long) value);
 
-		if (obj instanceof Float)
-			return new JsonDouble((Float) obj);
+		if (value instanceof Float)
+			return convert((float) value);
 
-		if (obj instanceof Double)
-			return new JsonDouble((Double) obj);
+		if (value instanceof Double)
+			return convert((double) value);
 
 		// strings
-		if (obj instanceof Character)
-			return new JsonString(obj.toString());
+		if (value instanceof Character)
+			return convert((char) value);
 
-		if (obj instanceof String)
-			return new JsonString((String) obj);
+		if (value instanceof String)
+			return convert((String) value);
 
 		// maps
-		if (obj instanceof Map) {
-			JsonMap map = new JsonMapImpl();
-
-			for (Map.Entry<?, ?> i : ((Map<?, ?>) obj).entrySet()) {
-				Object key = i.getKey();
-
-				if (!(key instanceof String))
-					throw new UnsupportedTypeException(String.format("Objects of type %s can't be used as key in a JSON map.", i.getClass()));
-
-				map.put((String) key, i.getValue());
-			}
-
-			return map;
-		}
+		if (value instanceof Map)
+			return convertMap((Map<?, ?>) value);
 
 		// lists
-		if (obj instanceof Iterable) {
-			JsonListImpl list = new JsonListImpl();
+		if (value instanceof Iterable)
+			return convert((Iterable<?>) value);
 
-			for (Object i : (Iterable<?>) obj)
-				list.add(i);
+		throw new UnsupportedTypeException(String.format("Objects of type %s can't be converted to a JsonObject.", value.getClass().getName()));
+	}
 
-			return list;
+	/**
+	 * Helper method that checks the keys of the map.
+	 */
+	private static JsonMap convertMap(Map<?, ?> obj) {
+		JsonMap map = new JsonMapImpl();
+
+		for (Map.Entry<?, ?> i : ((Map<?, ?>) obj).entrySet()) {
+			Object key = i.getKey();
+
+			if (!(key instanceof String))
+				throw new UnsupportedTypeException(String.format("Objects of type %s can't be used as key in a JSON map.", i.getClass()));
+
+			map.put((String) key, i.getValue());
 		}
 
-		throw new UnsupportedTypeException(String.format("Objects of type %s can't be converted to a JsonObject.", obj.getClass().getName()));
+		return map;
 	}
 
 	/**
@@ -222,6 +296,9 @@ public final class Json {
 			return parse(new InputStreamReader(inputStream, defaultCharset), url.toString());
 		}
 	}
+
+	@SuppressWarnings("ConstantNamingConvention")
+	public static final JsonObject NULL = JsonNull.instance;
 
 	private static final Charset defaultCharset = Charset.forName("utf-8");
 }

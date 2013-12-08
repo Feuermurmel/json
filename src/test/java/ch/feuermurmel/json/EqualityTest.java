@@ -8,7 +8,7 @@ import org.junit.Test;
 import static ch.feuermurmel.json.Json.*;
 import static org.hamcrest.CoreMatchers.*;
 
-public final class EqualsTest {
+public final class EqualityTest {
 	@Test
 	public void testEquality() throws Exception {
 		Map<String, Object> filledMap = new HashMap<>();
@@ -16,7 +16,7 @@ public final class EqualsTest {
 		filledMap.put("a", 1);
 		filledMap.put("b", 2);
 
-		List<Object> equalityGroups = Arrays.asList(null, false, true, 1, 2, 1., 2., "123", "abc", Arrays.asList(), Arrays.asList(1, 2, 3), new HashMap<>(), filledMap);
+		List<Object> equalityGroups = Arrays.asList(null, false, true, 1, 2, 1., 2., "123", "abc", 'a', Arrays.asList(), Arrays.asList(1, 2, 3), new HashMap<>(), filledMap);
 		List<JsonObject> convertedObjects = new ArrayList<>();
 
 		for (Object equalityGroup : equalityGroups)

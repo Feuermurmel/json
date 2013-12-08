@@ -59,10 +59,10 @@ final class Parser {
 			return JsonNull.instance;
 		} else if (lexer.testToken(Lexer.TokenType.falseValue)) {
 			lexer.useToken();
-			return JsonBoolean.getInstance(false);
+			return JsonBoolean.falseInstance;
 		} else if (lexer.testToken(Lexer.TokenType.trueValue)) {
 			lexer.useToken();
-			return JsonBoolean.getInstance(true);
+			return JsonBoolean.trueInstance;
 		} else if (lexer.testToken(Lexer.TokenType.integralValue)) {
 			Lexer.Token token = lexer.useToken();
 

@@ -20,11 +20,11 @@ public final class JsonMapTest {
 
 	@Test
 	public void testGet() throws Exception {
-		assertThat(map1.get("a"), equalTo(convert(null)));
+		assertThat(map1.get("a"), equalTo(NULL));
 		assertThat(map1.get("b"), equalTo(convert(false)));
 		assertThat(map1.get("c"), equalTo(convert(0)));
 
-		assertThat(map1.get("a", true), equalTo(convert(null)));
+		assertThat(map1.get("a", true), equalTo(NULL));
 		assertThat(map1.get("b", true), equalTo(convert(false)));
 		assertThat(map1.get("c", true), equalTo(convert(0)));
 
@@ -33,7 +33,7 @@ public final class JsonMapTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetFailure() throws Exception {
-		assertThat(map1.get("d"), equalTo(convert(null)));
+		assertThat(map1.get("d"), equalTo(NULL));
 	}
 
 	@Test

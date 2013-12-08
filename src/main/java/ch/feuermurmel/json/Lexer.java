@@ -88,6 +88,7 @@ final class Lexer {
 			while (testChar('0', '9') || testChar('.') || testChar('e') || testChar('E') || testChar('-') || testChar('+'))
 				useChar();
 			
+			// Cannot use the patters to find the match directly because we are reading from a Reader and not a CharSequence.
 			if (integralPattern.matcher(getMatch()).matches())
 				return finishToken(TokenType.integralValue);
 			else if (floatingPattern.matcher(getMatch()).matches())

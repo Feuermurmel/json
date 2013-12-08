@@ -13,6 +13,9 @@ final class JsonMapImpl extends AbstractJsonObject implements JsonMap {
 
 	@Override
 	public JsonMap put(String k, Object v) {
+		if (k == null)
+			throw new IllegalArgumentException("Key is null.");
+
 		data.put(k, Json.convert(v));
 
 		return this;

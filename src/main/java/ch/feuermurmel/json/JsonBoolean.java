@@ -8,13 +8,13 @@ package ch.feuermurmel.json;
 final class JsonBoolean extends AbstractJsonObject {
 	private final boolean value;
 
+	private JsonBoolean(boolean value) {
+		this.value = value;
+	}
+
 	@Override
 	public boolean isBoolean() {
 		return true;
-	}
-
-	private JsonBoolean(boolean value) {
-		this.value = value;
 	}
 
 	@Override
@@ -40,15 +40,6 @@ final class JsonBoolean extends AbstractJsonObject {
 		return Boolean.valueOf(value).hashCode();
 	}
 
-	private static final JsonObject falseInstance = new JsonBoolean(false);
-	private static final JsonObject trueInstance = new JsonBoolean(true);
-
-	/**
-	 * Returns an instance of this calss with the specified boolean value.
-	 *
-	 * @param value Boolean value to encapsulate.
-	 */
-	static JsonObject getInstance(boolean value) {
-		return value ? trueInstance : falseInstance;
-	}
+	static final JsonObject falseInstance = new JsonBoolean(false);
+	static final JsonObject trueInstance = new JsonBoolean(true);
 }
