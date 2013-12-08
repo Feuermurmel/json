@@ -4,7 +4,7 @@ package ch.feuermurmel.json;
  * Thrown when {@link Json#parse(String)} finds a syntax error in the passed JSON document.
  */
 public final class JsonParseException extends Exception {
-	public JsonParseException(String message) {
+	JsonParseException(String message) {
 		super(message);
 	}
 

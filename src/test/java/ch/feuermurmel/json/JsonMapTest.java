@@ -2,11 +2,12 @@ package ch.feuermurmel.json;
 
 import org.junit.Test;
 
+import static ch.feuermurmel.json.Json.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 public final class JsonMapTest {
-	private final JsonMap map1 = Json.map().put("a", null).put("b", false).put("c", 0);
+	private final JsonMap map1 = map().put("a", null).put("b", false).put("c", 0);
 
 	@Test
 	public void testPut() throws Exception {
@@ -14,25 +15,25 @@ public final class JsonMapTest {
 
 		assertThat(map1.size(), equalTo(4));
 		assertThat(map1.has("d"), equalTo(true));
-		assertThat(map1.get("d"), equalTo(Json.convert("")));
+		assertThat(map1.get("d"), equalTo(convert("")));
 	}
 
 	@Test
 	public void testGet() throws Exception {
-		assertThat(map1.get("a"), equalTo(Json.convert(null)));
-		assertThat(map1.get("b"), equalTo(Json.convert(false)));
-		assertThat(map1.get("c"), equalTo(Json.convert(0)));
+		assertThat(map1.get("a"), equalTo(convert(null)));
+		assertThat(map1.get("b"), equalTo(convert(false)));
+		assertThat(map1.get("c"), equalTo(convert(0)));
 
-		assertThat(map1.get("a", true), equalTo(Json.convert(null)));
-		assertThat(map1.get("b", true), equalTo(Json.convert(false)));
-		assertThat(map1.get("c", true), equalTo(Json.convert(0)));
+		assertThat(map1.get("a", true), equalTo(convert(null)));
+		assertThat(map1.get("b", true), equalTo(convert(false)));
+		assertThat(map1.get("c", true), equalTo(convert(0)));
 
-		assertThat(map1.get("d", true), equalTo(Json.convert(true)));
+		assertThat(map1.get("d", true), equalTo(convert(true)));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetFailure() throws Exception {
-		assertThat(map1.get("d"), equalTo(Json.convert(null)));
+		assertThat(map1.get("d"), equalTo(convert(null)));
 	}
 
 	@Test
@@ -46,12 +47,7 @@ public final class JsonMapTest {
 
 		assertThat(map1.size(), equalTo(2));
 	}
-
-	//@Test(expected = IllegalArgumentException.class)
-	//public void testRemoveFailure() throws Exception {
-	//	map1.remove("d");
-	//}
-
+	
 	@Test
 	public void testHas() throws Exception {
 		assertThat(map1.has("a"), equalTo(true));

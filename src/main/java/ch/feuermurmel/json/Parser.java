@@ -2,6 +2,7 @@ package ch.feuermurmel.json;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.regex.Pattern;
 
 final class Parser {
 	private final Lexer lexer;

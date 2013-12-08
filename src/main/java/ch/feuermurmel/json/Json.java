@@ -83,16 +83,16 @@ public final class Json {
 
 		// numbers
 		if (obj instanceof Byte)
-			return new JsonDouble((Byte) obj);
+			return new JsonLong((Byte) obj);
 
 		if (obj instanceof Short)
-			return new JsonDouble((Short) obj);
+			return new JsonLong((Short) obj);
 
 		if (obj instanceof Integer)
-			return new JsonDouble((Integer) obj);
+			return new JsonLong((Integer) obj);
 
 		if (obj instanceof Long)
-			return new JsonDouble((Long) obj);
+			return new JsonLong((Long) obj);
 
 		if (obj instanceof Float)
 			return new JsonDouble((Float) obj);

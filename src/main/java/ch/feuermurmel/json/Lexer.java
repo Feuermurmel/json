@@ -1,6 +1,7 @@
 package ch.feuermurmel.json;
 
 import java.io.*;
+import java.util.regex.Pattern;
 
 final class Lexer {
 	private final Reader input;
@@ -11,7 +12,7 @@ final class Lexer {
 	private int currentColumn = 0;
 
 	// contains a StringWriter to gather characters of a token, set to null while not parsing a token.
-	private StringWriter tokenWriter = null;
+	private StringBuilder tokenWriter = null;
 
 	// line and column number of the start of the currently recorded token.
 	private int tokenLine = -1;
@@ -81,25 +82,18 @@ final class Lexer {
 		} else if (testChar('n')) {
 			return keywordToken(TokenType.nullValue, "null");
 		} else if (testChar('0', '9') || testChar('-')) {
-			// accepts any glob made up of number characters, gets filtered by the parser ...
-			boolean isFloat = false;
-
 			startToken();
 			useChar();
 
-			while (true) {
-				if (testChar('.') || testChar('e') || testChar('E'))
-					isFloat = true;
-				else if (!testChar('0', '9') && !testChar('-'))
-					break;
-
+			while (testChar('0', '9') || testChar('.') || testChar('e') || testChar('E') || testChar('-') || testChar('+'))
 				useChar();
-			}
-
-			if (isFloat)
+			
+			if (integralPattern.matcher(getMatch()).matches())
+				return finishToken(TokenType.integralValue);
+			else if (floatingPattern.matcher(getMatch()).matches())
 				return finishToken(TokenType.floatingValue);
 			else
-				return finishToken(TokenType.integralValue);
+				throw createParseException("Invalid number");
 		} else if (testChar('\"')) {
 			// "((?:[^\\"]|\\.)*)"
 			startToken();
@@ -134,14 +128,14 @@ final class Lexer {
 
 	// record line and column number and start token recording
 	private void startToken() {
-		tokenWriter = new StringWriter();
+		tokenWriter = new StringBuilder();
 		tokenLine = currentLine;
 		tokenColumn = currentColumn;
 	}
 
 	// end token recording and return the read string
 	private Token finishToken(TokenType type) {
-		String match = tokenWriter.toString();
+		String match = getMatch();
 
 		tokenWriter = null;
 
@@ -160,7 +154,7 @@ final class Lexer {
 	private Token keywordToken(TokenType type, String keyword) throws IOException, JsonParseException {
 		int length = keyword.length();
 
-		// we skip testing the frist character as we wouldn't be here it it didn't match 
+		// we skip testing the first character as we wouldn't be here it it didn't match 
 		useChar();
 
 		for (int i = 1; i < length; i += 1) {
@@ -171,6 +165,10 @@ final class Lexer {
 		}
 
 		return new Token(type, keyword, currentLine, currentColumn - length);
+	}
+
+	private String getMatch() {
+		return tokenWriter.toString();
 	}
 
 	// return the current character and move to the next
@@ -248,4 +246,7 @@ final class Lexer {
 			this.column = column;
 		}
 	}
+
+	private static final Pattern integralPattern = Pattern.compile("-?0|[1-9][0-9]*");
+	private static final Pattern floatingPattern = Pattern.compile("(-?0|[1-9][0-9]*)(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)");
 }
