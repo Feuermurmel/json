@@ -3,13 +3,14 @@ package ch.feuermurmel.json;
 import java.io.IOException;
 
 /**
- Super class of all classes implementing the different JSON datatypes.
- <p/>
- This class defines some convenience methods to convert JSON objects to Java datatypes and convert them to their string representation.
- <p/>
- The utility class {@link Json} defines methods to parse JSON documents and create JSON objects from Java datatypes.
+ * Super class of all classes implementing the different JSON data types.
+ * <p/>
+ * This class defines some convenience methods to convert JSON objects to Java data types and convert them to their string representation.
+ * <p/>
+ * The utility class {@link Json} defines methods to parse JSON documents and create JSON objects from Java data types.
  */
-public abstract class JsonObjectImpl implements JsonObject {
+@SuppressWarnings("DesignForExtension")
+abstract class AbstractJsonObject implements JsonObject {
 	@Override
 	public abstract boolean equals(Object obj);
 
@@ -17,7 +18,6 @@ public abstract class JsonObjectImpl implements JsonObject {
 	public abstract int hashCode();
 
 	@Override
-	@SuppressWarnings("DesignForExtension")
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 
@@ -31,19 +31,16 @@ public abstract class JsonObjectImpl implements JsonObject {
 	}
 
 	@Override
-	@SuppressWarnings("DesignForExtension")
 	public void toString(Appendable destination) throws IOException {
 		destination.append(toString());
 	}
 
 	@Override
-	@SuppressWarnings("DesignForExtension")
 	public boolean asBoolean() {
 		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to boolean!");
 	}
 
 	@Override
-	@SuppressWarnings("DesignForExtension")
 	public long asLong() {
 		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to long!");
 	}
@@ -54,7 +51,6 @@ public abstract class JsonObjectImpl implements JsonObject {
 	}
 
 	@Override
-	@SuppressWarnings("DesignForExtension")
 	public double asDouble() {
 		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to double!");
 	}
@@ -65,31 +61,26 @@ public abstract class JsonObjectImpl implements JsonObject {
 	}
 
 	@Override
-	@SuppressWarnings("DesignForExtension")
 	public String asString() {
 		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a String!");
 	}
 
 	@Override
-	@SuppressWarnings("DesignForExtension")
-	public JsonListImpl asList() {
+	public JsonList asList() {
 		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a List!");
 	}
 
 	@Override
-	@SuppressWarnings("DesignForExtension")
 	public JsonMap asMap() {
 		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a Map!");
 	}
 
-	@SuppressWarnings("DesignForExtension")
 	@Override
 	public JsonObject clone() {
 		return this;
 	}
 
 	@Override
-	@SuppressWarnings("DesignForExtension")
 	public PrettyPrint prettyPrint() {
 		return new PrettyPrint.Atom(toString());
 	}
@@ -97,5 +88,45 @@ public abstract class JsonObjectImpl implements JsonObject {
 	@Override
 	public final JsonObject toJson() {
 		return this;
+	}
+
+	@Override
+	public boolean isBoolean() {
+		return false;
+	}
+
+	@Override
+	public boolean isFloating() {
+		return false;
+	}
+
+	@Override
+	public boolean isIntegral() {
+		return false;
+	}
+
+	@Override
+	public boolean isList() {
+		return false;
+	}
+
+	@Override
+	public boolean isMap() {
+		return false;
+	}
+
+	@Override
+	public boolean isNull() {
+		return false;
+	}
+
+	@Override
+	public boolean isNumber() {
+		return false;
+	}
+
+	@Override
+	public boolean isString() {
+		return false;
 	}
 }

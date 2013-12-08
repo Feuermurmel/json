@@ -9,7 +9,7 @@ final class Parser {
 	private Parser(Lexer lexer) {
 		this.lexer = lexer;
 	}
-	
+
 	private String parseString(Lexer.Token token) throws JsonParseException {
 		StringBuilder res = new StringBuilder();
 		String string = token.match;
@@ -53,45 +53,45 @@ final class Parser {
 	}
 
 	private JsonObject parse() throws IOException, JsonParseException {
-		if (lexer.testToken(Lexer.TokenType.Null)) {
+		if (lexer.testToken(Lexer.TokenType.nullValue)) {
 			lexer.useToken();
-			return JsonNullImpl.instance;
-		} else if (lexer.testToken(Lexer.TokenType.False)) {
+			return JsonNull.instance;
+		} else if (lexer.testToken(Lexer.TokenType.falseValue)) {
 			lexer.useToken();
-			return JsonBooleanImpl.instance(false);
-		} else if (lexer.testToken(Lexer.TokenType.True)) {
+			return JsonBoolean.getInstance(false);
+		} else if (lexer.testToken(Lexer.TokenType.trueValue)) {
 			lexer.useToken();
-			return JsonBooleanImpl.instance(true);
-		} else if (lexer.testToken(Lexer.TokenType.Integer)) {
+			return JsonBoolean.getInstance(true);
+		} else if (lexer.testToken(Lexer.TokenType.integralValue)) {
 			Lexer.Token token = lexer.useToken();
 
 			try {
-				return JsonNumberImpl.instance(Long.valueOf(token.match));
+				return new JsonLong(Long.valueOf(token.match));
 			} catch (NumberFormatException ignored) {
 				throw lexer.createParseException(token, "Invalid number literal.");
 			}
-		} else if (lexer.testToken(Lexer.TokenType.Float)) {
+		} else if (lexer.testToken(Lexer.TokenType.floatingValue)) {
 			Lexer.Token token = lexer.useToken();
 
 			try {
-				return JsonNumberImpl.instance(Double.valueOf(token.match));
+				return new JsonDouble(Double.valueOf(token.match));
 			} catch (NumberFormatException ignored) {
 				throw lexer.createParseException(token, "Invalid number literal.");
 			}
-		} else if (lexer.testToken(Lexer.TokenType.String)) {
-			return JsonStringImpl.instance(parseString(lexer.useToken()));
-		} else if (lexer.testToken(Lexer.TokenType.OpenBracket)) {
-			JsonListImpl list = JsonListImpl.create();
+		} else if (lexer.testToken(Lexer.TokenType.stringValue)) {
+			return new JsonString(parseString(lexer.useToken()));
+		} else if (lexer.testToken(Lexer.TokenType.openBracket)) {
+			JsonList list = new JsonListImpl();
 
 			lexer.useToken(); // [
 
-			if (!lexer.testToken(Lexer.TokenType.CloseBracket)) {
+			if (!lexer.testToken(Lexer.TokenType.closeBracket)) {
 				while (true) {
 					list.add(parse());
 
-					if (lexer.testToken(Lexer.TokenType.Comma))
+					if (lexer.testToken(Lexer.TokenType.comma))
 						lexer.useToken(); // ,
-					else if (lexer.testToken(Lexer.TokenType.CloseBracket))
+					else if (lexer.testToken(Lexer.TokenType.closeBracket))
 						break;
 					else
 						throw createParseExceptionUnexpectedToken("comma or closing bracket");
@@ -101,27 +101,27 @@ final class Parser {
 			lexer.useToken(); // ]
 
 			return list;
-		} else if (lexer.testToken(Lexer.TokenType.OpenBrace)) {
-			JsonMap map = JsonMapImpl.create();
+		} else if (lexer.testToken(Lexer.TokenType.openBrace)) {
+			JsonMap map = new JsonMapImpl();
 
 			lexer.useToken(); // {
 
-			if (!lexer.testToken(Lexer.TokenType.CloseBrace)) {
+			if (!lexer.testToken(Lexer.TokenType.closeBrace)) {
 				while (true) {
-					if (!lexer.testToken(Lexer.TokenType.String))
+					if (!lexer.testToken(Lexer.TokenType.stringValue))
 						throw createParseExceptionUnexpectedToken("string");
 
 					String key = parseString(lexer.useToken());
 
-					if (!lexer.testToken(Lexer.TokenType.Colon))
+					if (!lexer.testToken(Lexer.TokenType.colon))
 						throw createParseExceptionUnexpectedToken("colon");
 
 					lexer.useToken(); // :
 					map.put(key, parse());
 
-					if (lexer.testToken(Lexer.TokenType.Comma))
+					if (lexer.testToken(Lexer.TokenType.comma))
 						lexer.useToken(); // ,
-					else if (lexer.testToken(Lexer.TokenType.CloseBrace))
+					else if (lexer.testToken(Lexer.TokenType.closeBrace))
 						break;
 					else
 						throw createParseExceptionUnexpectedToken("comma or closing brace");
@@ -135,20 +135,20 @@ final class Parser {
 			throw createParseExceptionUnexpectedToken("open brace or bracket, number, string or boolean literal or 'null'");
 		}
 	}
-	
+
 	private JsonParseException createParseExceptionUnexpectedToken(String expected) throws IOException, JsonParseException {
 		return lexer.createParseException(lexer.useToken(), "Expected " + expected);
 	}
-	
+
 	static JsonObject runParser(Reader input, String sourceInfo) throws IOException, JsonParseException {
 		Lexer lexer = new Lexer(input, sourceInfo);
 		Parser instance = new Parser(lexer);
-		
+
 		JsonObject result = instance.parse();
-		
-		if (!lexer.testToken(Lexer.TokenType.EndOfFile))
+
+		if (!lexer.testToken(Lexer.TokenType.endOfFile))
 			throw instance.createParseExceptionUnexpectedToken("end of file");
-		
+
 		return result;
 	}
 }

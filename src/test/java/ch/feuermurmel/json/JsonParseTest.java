@@ -2,8 +2,6 @@ package ch.feuermurmel.json;
 
 import java.util.Arrays;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
 import org.junit.Test;
 
 @SuppressWarnings("PublicConstructor")
@@ -15,7 +13,7 @@ public final class JsonParseTest {
 			Json.parse(String.format("[%s]", i));
 		}
 	}
-	
+
 	//private static void checkEquals(JsonObject obj, JsonObject expected) {
 	//	if (expected instanceof JsonNull) {
 	//		Assert.assertThat(obj, CoreMatchers.instanceOf(JsonNull.class));

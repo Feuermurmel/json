@@ -26,7 +26,7 @@ final class Lexer {
 	Lexer(Reader input, String sourceInfo) throws IOException, JsonParseException {
 		this.input = input;
 		this.sourceInfo = sourceInfo;
-		
+
 		nextChar = readChar();
 		nextToken = readToken();
 	}
@@ -63,23 +63,23 @@ final class Lexer {
 			useChar();
 
 		if (testChar(',')) {
-			return singleCharToken(TokenType.Comma);
+			return singleCharToken(TokenType.comma);
 		} else if (testChar(':')) {
-			return singleCharToken(TokenType.Colon);
+			return singleCharToken(TokenType.colon);
 		} else if (testChar('{')) {
-			return singleCharToken(TokenType.OpenBrace);
+			return singleCharToken(TokenType.openBrace);
 		} else if (testChar('}')) {
-			return singleCharToken(TokenType.CloseBrace);
+			return singleCharToken(TokenType.closeBrace);
 		} else if (testChar('[')) {
-			return singleCharToken(TokenType.OpenBracket);
+			return singleCharToken(TokenType.openBracket);
 		} else if (testChar(']')) {
-			return singleCharToken(TokenType.CloseBracket);
+			return singleCharToken(TokenType.closeBracket);
 		} else if (testChar('t')) {
-			return keywordToken(TokenType.True, "true");
+			return keywordToken(TokenType.trueValue, "true");
 		} else if (testChar('f')) {
-			return keywordToken(TokenType.False, "false");
+			return keywordToken(TokenType.falseValue, "false");
 		} else if (testChar('n')) {
-			return keywordToken(TokenType.Null, "null");
+			return keywordToken(TokenType.nullValue, "null");
 		} else if (testChar('0', '9') || testChar('-')) {
 			// accepts any glob made up of number characters, gets filtered by the parser ...
 			boolean isFloat = false;
@@ -97,9 +97,9 @@ final class Lexer {
 			}
 
 			if (isFloat)
-				return finishToken(TokenType.Float);
+				return finishToken(TokenType.floatingValue);
 			else
-				return finishToken(TokenType.Integer);
+				return finishToken(TokenType.integralValue);
 		} else if (testChar('\"')) {
 			// "((?:[^\\"]|\\.)*)"
 			startToken();
@@ -122,16 +122,16 @@ final class Lexer {
 
 			useChar();
 
-			return finishToken(TokenType.String);
+			return finishToken(TokenType.stringValue);
 		} else if (isEOF()) {
-			return new Token(TokenType.EndOfFile, "", currentLine, currentColumn); // meaning there are no more tokens
+			return new Token(TokenType.endOfFile, "", currentLine, currentColumn); // meaning there are no more tokens
 		} else if (testControlChar()) {
 			throw createParseException("Invalid control character");
 		} else {
 			throw createParseException("Invalid token");
 		}
 	}
-	
+
 	// record line and column number and start token recording
 	private void startToken() {
 		tokenWriter = new StringWriter();
@@ -207,7 +207,7 @@ final class Lexer {
 		return Character.isISOControl(nextChar);
 	}
 
-	// reads one chartacter, return -1 on EOF
+	// reads one character, return -1 on EOF
 	private int readChar() throws IOException {
 		return input.read();
 	}
@@ -217,19 +217,19 @@ final class Lexer {
 	}
 
 	public enum TokenType {
-		OpenBrace,
-		CloseBrace,
-		OpenBracket,
-		CloseBracket,
-		Colon,
-		Comma,
-		String,
-		Integer,
-		Float,
-		True,
-		False,
-		Null,
-		EndOfFile
+		openBrace,
+		closeBrace,
+		openBracket,
+		closeBracket,
+		colon,
+		comma,
+		stringValue,
+		integralValue,
+		floatingValue,
+		trueValue,
+		falseValue,
+		nullValue,
+		endOfFile
 	}
 
 	public static class Token {

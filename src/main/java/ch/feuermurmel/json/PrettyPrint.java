@@ -5,11 +5,11 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 /**
- This class is used to pretty-print a JsonObject.
- <p/>
- {@link JsonObjectImpl#prettyPrint()} returns an instance of this class. The different {@code format} methods can be used to specify line complexity before wrapping occrus and the string used for indenting.
- <p/>
- {@link #toString()} will convert the original {@code JsonObject} to a string using the set formating parameters.
+ * This class is used to pretty-print a JsonObject.
+ * <p/>
+ * {@link AbstractJsonObject#prettyPrint()} returns an instance of this class. The different {@code format(...)} methods can be used to specify line complexity before wrapping occurs and the string used for indenting.
+ * <p/>
+ * {@link #toString()} will convert the original {@link JsonObject} to a string using the set formatting parameters.
  */
 public abstract class PrettyPrint {
 	private Format format = defaultFormat;
@@ -18,36 +18,44 @@ public abstract class PrettyPrint {
 
 	protected abstract boolean isSimple();
 
-	protected abstract void toString(String indent, int numPrefix, Format format, Appendable dest) throws IOException;
+	protected abstract void toString(String indent, int numPrefix, Format format, Appendable destination) throws IOException;
 
 	/**
-	 Set formatting parameters used for pretty-printing.
-
-	 @param maxNodesPerLine Maximum number of tokes on a line before line wrapping occurs.
-	 @param lineIndent String used to indent lines inside data structures.
-	 @param lineSeparator String used to sepparate lines.
+	 * Set formatting parameters used for pretty-printing.
+	 *
+	 * @param maxNodesPerLine Maximum number of tokes on a line before line wrapping occurs.
+	 * @param lineIndent String used to indent lines inside data structures.
+	 * @param lineSeparator String used to separate lines.
 	 */
 	public final PrettyPrint format(int maxNodesPerLine, String lineIndent, String lineSeparator) {
 		format = new Format(maxNodesPerLine, lineIndent, lineSeparator);
 		return this;
 	}
 
-	/** @see #format(int, String, String) */
+	/**
+	 * @see #format(int, String, String)
+	 */
 	public final PrettyPrint format(int maxNodesPerLine) {
 		return format(maxNodesPerLine, format.lineIndent, format.lineSeparator);
 	}
 
-	/** @see #format(int, String, String) */
+	/**
+	 * @see #format(int, String, String)
+	 */
 	public final PrettyPrint format(String lineIndent) {
 		return format(format.maxNodesPerLine, lineIndent, format.lineSeparator);
 	}
 
-	/** @see #format(int, String, String) */
+	/**
+	 * @see #format(int, String, String)
+	 */
 	public final PrettyPrint format(String lineIndent, String lineSeparator) {
 		return format(format.maxNodesPerLine, lineIndent, lineSeparator);
 	}
 
-	/** Convert the formatted {@code JsonObject} to a string. */
+	/**
+	 * Convert the formatted {@link JsonObject} to a string.
+	 */
 	@Override
 	public final String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -61,9 +69,11 @@ public abstract class PrettyPrint {
 		return builder.toString();
 	}
 
-	/** Write the formatted {@code JsonObject} to an instance of {@code Appendable} like {@link StringBuilder} or {@link OutputStreamWriter}. */
-	public final void toString(Appendable dest) throws IOException {
-		toString("", 0, format, dest);
+	/**
+	 * Write the formatted {@link JsonObject} to an instance of {@link Appendable} like {@link StringBuilder} or {@link OutputStreamWriter}.
+	 */
+	public final void toString(Appendable destination) throws IOException {
+		toString("", 0, format, destination);
 	}
 
 	private static final Format defaultFormat = new Format(7, "\t", "\n");
@@ -79,11 +89,11 @@ public abstract class PrettyPrint {
 			this.lineSeparator = lineSeparator;
 		}
 	}
-
-	public static final class Atom extends PrettyPrint {
+	
+	static final class Atom extends PrettyPrint {
 		private final String value;
 
-		public Atom(String value) {
+		Atom(String value) {
 			this.value = value;
 		}
 
@@ -98,16 +108,16 @@ public abstract class PrettyPrint {
 		}
 
 		@Override
-		protected void toString(String indent, int numPrefix, Format format, Appendable dest) throws IOException {
-			dest.append(value);
+		protected void toString(String indent, int numPrefix, Format format, Appendable destination) throws IOException {
+			destination.append(value);
 		}
 	}
 
-	public static final class Prefix extends PrettyPrint {
+	static final class Prefix extends PrettyPrint {
 		private final String prefix;
 		private final PrettyPrint value;
 
-		public Prefix(String prefix, PrettyPrint value) {
+		Prefix(String prefix, PrettyPrint value) {
 			this.prefix = prefix;
 			this.value = value;
 		}
@@ -123,19 +133,19 @@ public abstract class PrettyPrint {
 		}
 
 		@Override
-		protected void toString(String indent, int numPrefix, Format format, Appendable dest) throws IOException {
-			dest.append(prefix);
-			value.toString(indent, numPrefix + 1, format, dest);
+		protected void toString(String indent, int numPrefix, Format format, Appendable destination) throws IOException {
+			destination.append(prefix);
+			value.toString(indent, numPrefix + 1, format, destination);
 		}
 	}
 
-	public static final class List extends PrettyPrint {
-		private final java.util.List<PrettyPrint> elements = new ArrayList<PrettyPrint>();
+	static final class List extends PrettyPrint {
+		private final java.util.List<PrettyPrint> elements = new ArrayList<>();
 		private final String prefix;
 		private final String suffix;
 		private final String umfixWS;
 
-		public List(String prefix, String suffix, String umfixWS) {
+		List(String prefix, String suffix, String umfixWS) {
 			this.prefix = prefix;
 			this.suffix = suffix;
 			this.umfixWS = umfixWS;
@@ -161,7 +171,7 @@ public abstract class PrettyPrint {
 		}
 
 		@Override
-		protected void toString(String indent, int numPrefix, Format format, Appendable dest) throws IOException {
+		protected void toString(String indent, int numPrefix, Format format, Appendable destination) throws IOException {
 			boolean simple = true;
 
 			for (PrettyPrint i : elements) {
@@ -172,30 +182,30 @@ public abstract class PrettyPrint {
 			}
 
 			if (elements.isEmpty()) {
-				dest.append(prefix + umfixWS + suffix);
+				destination.append(prefix + umfixWS + suffix);
 			} else if (simple || numNodes() + numPrefix <= format.maxNodesPerLine) {
-				dest.append(prefix + umfixWS);
+				destination.append(prefix + umfixWS);
 
 				String sep = "";
 				for (PrettyPrint i : elements) {
-					dest.append(sep);
-					i.toString("", 0, format, dest);
+					destination.append(sep);
+					i.toString("", 0, format, destination);
 					sep = ", ";
 				}
 
-				dest.append(umfixWS + suffix);
+				destination.append(umfixWS + suffix);
 			} else {
-				dest.append(prefix);
+				destination.append(prefix);
 
 				String indentPlus = indent + format.lineIndent;
 				String sep = "";
 				for (PrettyPrint i : elements) {
-					dest.append(sep + format.lineSeparator + indentPlus);
-					i.toString(indentPlus, 0, format, dest);
+					destination.append(sep + format.lineSeparator + indentPlus);
+					i.toString(indentPlus, 0, format, destination);
 					sep = ",";
 				}
 
-				dest.append(format.lineSeparator + indent + suffix);
+				destination.append(format.lineSeparator + indent + suffix);
 			}
 		}
 	}

@@ -3,10 +3,13 @@ package ch.feuermurmel.json;
 import java.io.IOException;
 import java.util.*;
 
-final class JsonListImpl extends JsonObjectImpl implements JsonList {
+final class JsonListImpl extends AbstractJsonObject implements JsonList {
 	private final List<JsonObject> data = new ArrayList<>();
 
-	private JsonListImpl() { }
+	@Override
+	public boolean isList() {
+		return true;
+	}
 
 	@Override
 	public JsonListImpl add(Object e) {
@@ -55,7 +58,7 @@ final class JsonListImpl extends JsonObjectImpl implements JsonList {
 	}
 
 	@Override
-	public JsonListImpl asList() {
+	public JsonList asList() {
 		return this;
 	}
 
@@ -91,10 +94,10 @@ final class JsonListImpl extends JsonObjectImpl implements JsonList {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj.getClass() != JsonListImpl.class)
-			return false;
+		if (obj instanceof JsonListImpl)
+			return ((JsonListImpl) obj).data.equals(data);
 
-		return ((JsonListImpl) obj).data.equals(data);
+		return false;
 	}
 
 	@Override
@@ -103,33 +106,12 @@ final class JsonListImpl extends JsonObjectImpl implements JsonList {
 	}
 
 	@Override
-	public JsonListImpl clone() {
+	public JsonList clone() {
 		JsonListImpl res = new JsonListImpl();
 
 		for (JsonObject i : data)
 			res.add(i.clone());
 
 		return res;
-	}
-
-	/** Create and return an empty {@code JsonList}. */
-	static JsonListImpl create() {
-		return new JsonListImpl();
-	}
-
-	/**
-	 Create and return a {@code JsonList} and initialize with the contents of the specified sequence.
-	 <p/>
-	 Each value will be converted by {@link Json#convert(Object)}
-
-	 @param content Sequence to use the values from.
-	 */
-	static JsonListImpl create(Iterable<?> content) {
-		JsonListImpl list = new JsonListImpl();
-
-		for (Object i : content)
-			list.add(i);
-
-		return list;
 	}
 }

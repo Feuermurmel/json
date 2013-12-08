@@ -3,10 +3,13 @@ package ch.feuermurmel.json;
 import java.io.IOException;
 import java.util.*;
 
-final class JsonMapImpl extends JsonObjectImpl implements JsonMap {
-	private final Map<String, JsonObject> data = new LinkedHashMap<String, JsonObject>();
+final class JsonMapImpl extends AbstractJsonObject implements JsonMap {
+	private final Map<String, JsonObject> data = new LinkedHashMap<>();
 
-	private JsonMapImpl() { }
+	@Override
+	public boolean isMap() {
+		return true;
+	}
 
 	@Override
 	public JsonMap put(String k, Object v) {
@@ -63,8 +66,20 @@ final class JsonMapImpl extends JsonObjectImpl implements JsonMap {
 	public PrettyPrint prettyPrint() {
 		PrettyPrint.List res = new PrettyPrint.List("{", "}", " ");
 
-		for (Map.Entry<String, JsonObject> i : data.entrySet())
-			res.add(new PrettyPrint.Prefix(JsonStringImpl.instance(i.getKey()) + ": ", i.getValue().prettyPrint()));
+		for (Map.Entry<String, JsonObject> i : data.entrySet()) {
+			StringBuilder builder = new StringBuilder();
+
+			try {
+				JsonString.stringRepresentation(builder, i.getKey());
+			} catch (IOException e) {
+				// Can't happen with a StringBuilder.
+				throw new AssertionError(e);
+			}
+
+			builder.append(":");
+
+			res.add(new PrettyPrint.Prefix(builder.toString(), i.getValue().prettyPrint()));
+		}
 
 		return res;
 	}
@@ -76,7 +91,7 @@ final class JsonMapImpl extends JsonObjectImpl implements JsonMap {
 		String sep = "";
 		for (Map.Entry<String, JsonObject> i : data.entrySet()) {
 			destination.append(sep);
-			JsonStringImpl.instance(i.getKey()).toString(destination);
+			JsonString.stringRepresentation(destination, i.getKey());
 			destination.append(":");
 			i.getValue().toString(destination);
 
@@ -88,10 +103,10 @@ final class JsonMapImpl extends JsonObjectImpl implements JsonMap {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj.getClass() != JsonMapImpl.class)
-			return false;
+		if (obj instanceof JsonMapImpl)
+			return ((JsonMapImpl) obj).data.equals(data);
 
-		return ((JsonMapImpl) obj).data.equals(data);
+		return false;
 	}
 
 	@Override
@@ -107,21 +122,5 @@ final class JsonMapImpl extends JsonObjectImpl implements JsonMap {
 			res.put(i.getKey(), i.getValue().clone());
 
 		return res;
-	}
-
-	/** Create and return an empty {@code JsonMap}. */
-	static JsonMap create() {
-		return new JsonMapImpl();
-	}
-
-	/** Create and return a {@code JsonList} and initialize with the contents of {@code contents}. */
-	// FIXME: Keys that are instances of JsonString will have quotes added before being used as keys in this JsonMap
-	static JsonMap create(Map<?, ?> content) {
-		JsonMap map = new JsonMapImpl();
-
-		for (Map.Entry<?, ?> i : content.entrySet())
-			map.put(i.getKey().toString(), i.getValue());
-
-		return map;
 	}
 }

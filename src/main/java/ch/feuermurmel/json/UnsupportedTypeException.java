@@ -1,16 +1,14 @@
 package ch.feuermurmel.json;
 
-/** Thrown when one of {@link JsonObjectImpl}'s cast methods is called on an instance of the wrong subclass. */
+/**
+ * Thrown when one of {@link JsonObject}'s cast methods is called on an instance of the wrong subclass or {@link Json#convert(Object)} is used to convert a Java value that cannot be converted to a JSON value.
+ */
 public class UnsupportedTypeException extends RuntimeException {
-	public UnsupportedTypeException(String message) {
+	UnsupportedTypeException(String message) {
 		super(message);
 	}
 
-	public UnsupportedTypeException(String input, String type) {
+	UnsupportedTypeException(String input, String type) {
 		this(String.format("Only objects of type %s can be converted to %s!", input, type));
-	}
-
-	public UnsupportedTypeException(String message, RuntimeException e) {
-		super(message, e);
 	}
 }

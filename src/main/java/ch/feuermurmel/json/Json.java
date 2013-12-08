@@ -13,6 +13,8 @@ public final class Json {
 	private Json() {
 	}
 
+	// TODO: Overload this method with a vararg variant
+
 	/**
 	 * Shortcut for {@link JsonListImpl#create()}.
 	 * <p/>
@@ -23,8 +25,10 @@ public final class Json {
 	 * @return a new, empty JsonList.
 	 */
 	public static JsonListImpl list() {
-		return JsonListImpl.create();
+		return new JsonListImpl();
 	}
+
+	// TODO: Overload this method with a vararg variant
 
 	/**
 	 * Shortcut for {@link JsonMapImpl#create()}.
@@ -36,27 +40,32 @@ public final class Json {
 	 * @return a new, empty JsonList.
 	 */
 	public static JsonMap map() {
-		return JsonMapImpl.create();
+		return new JsonMapImpl();
 	}
 
+	// TODO: Overload this method with specific types
+
 	/**
-	 * This method either casts or converts an object to a subclass of {@link JsonObjectImpl}.
+	 * This method either casts or converts an object to an implementation {@link JsonObject}.
 	 * <p/>
-	 * If the passed object is a subclass of JsonObject it will be cast. If the object implements {@link JsonConvertible}, it's {@link JsonConvertible#toJson()} method wil be called. Other types will be converted according to this list:
+	 * If the passed object is a subclass of JsonObject it will be cast. If the object implements {@link JsonConvertible}, it's {@link JsonConvertible#toJson()} method wil be called. Other types will be converted according to these rules:
 	 * <p/>
-	 * - {@code null} will be converted to {@link JsonNullImpl}.
+	 * - {@code null} will be converted to {@link JsonNull}.
 	 * <p/>
-	 * - {@code boolean} and instances of {@code Boolean} will be converted to {@link JsonBooleanImpl}.
+	 * - {@code boolean} and instances of {@code Boolean} will be converted to a JSON boolean.
 	 * <p/>
-	 * - {@code byte}, {@code short}, {@code int}, {@code long}, {@code float}, {@code double} and instances of their boxed variants will be converted to {@link JsonNumberImpl}.
+	 * - {@code byte}, {@code short}, {@code int}, {@code long} and instances of their boxed variants will be converted to an integral JSON number.
 	 * <p/>
-	 * - {@code char} and instances of {@code Character} and {@code String} will be converted to {@link JsonStringImpl}.
+	 * - {@code float}, {@code double} and instances of their boxed variants will be converted to a floating JSON number.
 	 * <p/>
-	 * - Instances of {@link Map} will be converted to {@link JsonMapImpl}. Their keys will be converted using {@code toString()}, their values using this method.
+	 * - {@code char} and instances of {@code Character} and {@code String} will be converted to {@link JsonString}.
 	 * <p/>
-	 * - Instances of {@link Iterable} will be converted to {@link List}. Their elements will be converted using this method.
+	 * - Instances of {@link Map} will be converted to a {@link JsonMap}. The values will be converted using this method. Only strings are allowed as keys.
+	 * <p/>
+	 * - Instances of {@link Iterable} will be converted to {@link List}. The elements will be converted using this method.
 	 *
 	 * @param obj The object to convert.
+	 *
 	 * @throws UnsupportedTypeException when the argument or any of it's members cannot be converted to a JsonObject.
 	 */
 	public static JsonObject convert(Object obj) {
@@ -66,56 +75,76 @@ public final class Json {
 
 		// special null treatment
 		if (obj == null)
-			return JsonNullImpl.instance;
+			return JsonNull.instance;
 
 		// booleans
 		if (obj instanceof Boolean)
-			return JsonBooleanImpl.instance((Boolean) obj);
+			return JsonBoolean.getInstance((Boolean) obj);
 
 		// numbers
 		if (obj instanceof Byte)
-			return JsonNumberImpl.instance((Byte) obj);
+			return new JsonDouble((Byte) obj);
 
 		if (obj instanceof Short)
-			return JsonNumberImpl.instance((Short) obj);
+			return new JsonDouble((Short) obj);
 
 		if (obj instanceof Integer)
-			return JsonNumberImpl.instance((Integer) obj);
+			return new JsonDouble((Integer) obj);
 
 		if (obj instanceof Long)
-			return JsonNumberImpl.instance((Long) obj);
+			return new JsonDouble((Long) obj);
 
 		if (obj instanceof Float)
-			return JsonNumberImpl.instance((Float) obj);
+			return new JsonDouble((Float) obj);
 
 		if (obj instanceof Double)
-			return JsonNumberImpl.instance((Double) obj);
+			return new JsonDouble((Double) obj);
 
 		// strings
 		if (obj instanceof Character)
-			return JsonStringImpl.instance(obj.toString());
+			return new JsonString(obj.toString());
 
 		if (obj instanceof String)
-			return JsonStringImpl.instance((String) obj);
+			return new JsonString((String) obj);
 
 		// maps
-		if (obj instanceof Map)
-			return JsonMapImpl.create((Map<?, ?>) obj);
+		if (obj instanceof Map) {
+			JsonMap map = new JsonMapImpl();
+
+			for (Map.Entry<?, ?> i : ((Map<?, ?>) obj).entrySet()) {
+				Object key = i.getKey();
+
+				if (!(key instanceof String))
+					throw new UnsupportedTypeException(String.format("Objects of type %s can't be used as key in a JSON map.", i.getClass()));
+
+				map.put((String) key, i.getValue());
+			}
+
+			return map;
+		}
 
 		// lists
-		if (obj instanceof Iterable)
-			return JsonListImpl.create((Iterable<?>) obj);
+		if (obj instanceof Iterable) {
+			JsonListImpl list = new JsonListImpl();
 
-		throw new UnsupportedTypeException("Objects of type " + obj.getClass().getName() + " can't be converted to a JsonObject!");
+			for (Object i : (Iterable<?>) obj)
+				list.add(i);
+
+			return list;
+		}
+
+		throw new UnsupportedTypeException(String.format("Objects of type %s can't be converted to a JsonObject.", obj.getClass().getName()));
 	}
 
 	/**
-	 * Parse a JSON document into a {@link JsonObjectImpl}.
+	 * Parse a JSON document into a {@link AbstractJsonObject}.
 	 * <p/>
-	 * Will parse the document according to the JSON document syntax. Can also be used on the output of {@link JsonObjectImpl#toString()} or {@link JsonObjectImpl#prettyPrint()}.
+	 * Will parse the document according to the JSON document syntax. Can also be used on the output of {@link AbstractJsonObject#toString()} or {@link AbstractJsonObject#prettyPrint()}.
 	 *
 	 * @param input The string to parse. May contain leading or trailing whitespace.
-	 * @return the parsed {@link JsonObjectImpl}.
+	 *
+	 * @return the parsed {@link AbstractJsonObject}.
+	 *
 	 * @throws JsonParseException if invalid syntax is encountered.
 	 */
 	public static JsonObject parse(String input) throws JsonParseException {
@@ -141,7 +170,9 @@ public final class Json {
 	 * Currently, the stream has to end after the document or parsing will fail.
 	 *
 	 * @param input Source to read from, e.g. an {@link InputStreamReader}.
-	 * @return the parsed {@link JsonObjectImpl}.
+	 *
+	 * @return the parsed {@link AbstractJsonObject}.
+	 *
 	 * @throws JsonParseException if invalid syntax is encountered.
 	 * @throws IOException it the passed {@code Reader} throws an {@code IOException}.
 	 */
@@ -164,7 +195,9 @@ public final class Json {
 	 * The file will be decoded using the UTF-8 encoding.
 	 *
 	 * @param file File that should be read.
+	 *
 	 * @return Returns the parsed JSON document.
+	 *
 	 * @throws IOException When loading fails because of a network or other IO error.
 	 * @throws JsonParseException When parsing of the received/loaded JSON document failed. This may for example happen if the server closes the connection after sending a successful response code.
 	 */
@@ -178,7 +211,9 @@ public final class Json {
 	 * The file will be decoded using the UTF-8 encoding.
 	 *
 	 * @param url URL identifying the resource from which to load the JSON document.
+	 *
 	 * @return Returns the parsed JSON document.
+	 *
 	 * @throws IOException When loading fails because of a network or other IO error.
 	 * @throws JsonParseException When parsing of the received/loaded JSON document failed. This may for example happen if the server closes the connection after sending a successful response code.
 	 */
