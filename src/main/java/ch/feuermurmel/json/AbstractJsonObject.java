@@ -37,12 +37,12 @@ abstract class AbstractJsonObject implements JsonObject {
 
 	@Override
 	public boolean asBoolean() {
-		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to boolean!");
+		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a boolean!");
 	}
 
 	@Override
 	public long asLong() {
-		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to long!");
+		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a long!");
 	}
 
 	@Override
@@ -52,7 +52,7 @@ abstract class AbstractJsonObject implements JsonObject {
 
 	@Override
 	public double asDouble() {
-		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to double!");
+		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a double!");
 	}
 
 	@Override
