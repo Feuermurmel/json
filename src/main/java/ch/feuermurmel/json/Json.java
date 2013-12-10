@@ -12,6 +12,11 @@ public final class Json {
 	private Json() {
 	}
 
+	@SuppressWarnings("ConstantNamingConvention")
+	public static final JsonObject NULL = JsonNull.instance;
+
+	private static final Charset defaultCharset = Charset.forName("utf-8");
+
 	/**
 	 * Shortcut for {@link JsonListImpl#create()}.
 	 * <p/>
@@ -193,24 +198,6 @@ public final class Json {
 	}
 
 	/**
-	 * Helper method that checks the keys of the map.
-	 */
-	private static JsonMap convertMap(Map<?, ?> obj) {
-		JsonMap map = new JsonMapImpl();
-
-		for (Map.Entry<?, ?> i : ((Map<?, ?>) obj).entrySet()) {
-			Object key = i.getKey();
-
-			if (!(key instanceof String))
-				throw new UnsupportedTypeException(String.format("Objects of type %s can't be used as key in a JSON map.", i.getClass()));
-
-			map.put((String) key, i.getValue());
-		}
-
-		return map;
-	}
-
-	/**
 	 * Parse a JSON document into a {@link AbstractJsonObject}.
 	 * <p/>
 	 * Will parse the document according to the JSON document syntax. Can also be used on the output of {@link AbstractJsonObject#toString()} or {@link AbstractJsonObject#prettyPrint()}.
@@ -297,8 +284,21 @@ public final class Json {
 		}
 	}
 
-	@SuppressWarnings("ConstantNamingConvention")
-	public static final JsonObject NULL = JsonNull.instance;
+	/**
+	 * Helper method that checks the keys of the map.
+	 */
+	private static JsonMap convertMap(Map<?, ?> obj) {
+		JsonMap map = new JsonMapImpl();
 
-	private static final Charset defaultCharset = Charset.forName("utf-8");
+		for (Map.Entry<?, ?> i : ((Map<?, ?>) obj).entrySet()) {
+			Object key = i.getKey();
+
+			if (!(key instanceof String))
+				throw new UnsupportedTypeException(String.format("Objects of type %s can't be used as key in a JSON map.", i.getClass()));
+
+			map.put((String) key, i.getValue());
+		}
+
+		return map;
+	}
 }

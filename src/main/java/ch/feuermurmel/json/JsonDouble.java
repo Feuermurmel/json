@@ -18,14 +18,6 @@ final class JsonDouble extends AbstractJsonNumber {
 	}
 
 	/**
-	 * Return the number casted to a long. This will result in truncation of double values.
-	 */
-	@Override
-	public long asLong() {
-		return (long) value;
-	}
-
-	/**
 	 * Return the number casted to a double.
 	 */
 	@Override
