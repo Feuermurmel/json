@@ -103,13 +103,7 @@ public abstract class JsonNumber extends JsonObject {
 		public boolean isIntegral() {
 			return false;
 		}
-
-		/** Return the number casted to a long. This will result in truncation of double values. */
-		@Override
-		public long asLong() {
-			return (long) value;
-		}
-
+		
 		/** Return the number casted to a double. */
 		@Override
 		public double asDouble() {

@@ -60,7 +60,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	 */
 	@SuppressWarnings("DesignForExtension")
 	public boolean asBoolean() {
-		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to boolean!");
+		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a boolean!");
 	}
 
 	/**
@@ -70,7 +70,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	 */
 	@SuppressWarnings("DesignForExtension")
 	public long asLong() {
-		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to long!");
+		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a long!");
 	}
 
 	/**
@@ -89,7 +89,7 @@ public abstract class JsonObject implements JsonConvertible, Cloneable {
 	 */
 	@SuppressWarnings("DesignForExtension")
 	public double asDouble() {
-		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to double!");
+		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a double!");
 	}
 
 	/**
