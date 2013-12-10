@@ -19,8 +19,6 @@ public final class InvalidConversionsTest {
 
 	@Test(expected = UnsupportedTypeException.class)
 	public void testCoercion() {
-		System.out.println(String.format("%s %s", javaValue, invalidCoercion));
-		
 		invalidCoercion.coerce(convert(javaValue));
 	}
 
