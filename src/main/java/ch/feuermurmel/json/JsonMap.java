@@ -57,4 +57,10 @@ public interface JsonMap extends JsonObject, Iterable<String> {
 	 * Number of key-value-pairs in the map.
 	 */
 	int size();
+
+	/**
+	 * Covariant overload of {@link JsonObject#clone()} so that the result does not need to be casted to a {@link JsonMap}.
+	 */
+	@Override
+	JsonMap clone();
 }

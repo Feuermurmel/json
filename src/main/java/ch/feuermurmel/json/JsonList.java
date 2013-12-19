@@ -61,4 +61,10 @@ public interface JsonList extends JsonObject, Iterable<JsonObject> {
 	 * Number of elements in this list.
 	 */
 	int size();
+
+	/**
+	 * Covariant overload of {@link JsonObject#clone()} so that the result does not need to be casted to a {@link JsonList}.
+	 */
+	@Override
+	JsonList clone();
 }
