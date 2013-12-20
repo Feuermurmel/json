@@ -248,6 +248,6 @@ final class Lexer {
 		}
 	}
 
-	private static final Pattern integralPattern = Pattern.compile("-?0|[1-9][0-9]*");
-	private static final Pattern floatingPattern = Pattern.compile("(-?0|[1-9][0-9]*)(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)");
+	private static final Pattern integralPattern = Pattern.compile("-?(0|[1-9][0-9]*)");
+	private static final Pattern floatingPattern = Pattern.compile("(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)");
 }

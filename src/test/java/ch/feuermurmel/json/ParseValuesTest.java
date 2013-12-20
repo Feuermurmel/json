@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import static ch.feuermurmel.json.Json.*;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThat;
 
 @SuppressWarnings("InstanceVariableMayNotBeInitialized")
@@ -18,7 +19,7 @@ public final class ParseValuesTest {
 	public Object value;
 	
 	@Parameterized.Parameter(1)
-	public String[] documents;
+	public List<String> documents;
 
 	@Test
 	public void testParse() throws JsonParseException {
@@ -29,24 +30,31 @@ public final class ParseValuesTest {
 
 	@Parameterized.Parameters
 	public static List<Object[]> parameters() {
-		// TODO: Add more test for different number formats and string escapes.
-		return Arrays.asList(new Object[][] {
-			{ null, new String[]{ "null", " null", " null " } },
-			{ true, new String[]{ "true" } },
-			{ false, new String[]{ "false" } },
-			{ 0, new String[]{ "0", "-0" } },
-			{ 1, new String[]{ "1" } },
-			{ (long) 1e10, new String[]{ "10000000000" } },
-			{ 0., new String[]{ "0.0", "-0.0", "0e0", "0e+0", "0e-0", "0e10" } },
-			{ 1., new String[]{ "1.0", "1.0e0", "1e0", "1e+0", "1e-0" } },
-			{ 1.5, new String[]{ "1.5", "1.5e0" } },
-			{ 1e10, new String[]{ "1e10", "1e+10" } },
-			{ 1e-10, new String[]{ "1e-10" } },
-			{ "abc", new String[]{ "\"abc\"" } },
-			{ list(), new String[]{ "[]", " [ ] " } },
-			{ list().add(1).add(2), new String[]{ "[1,2]", "[1, 2]", " [ 1 , 2 ] " } },
-			{ map(), new String[]{ "{}" } },
-			{ map().put("a", 1).put("b", 2), new String[]{ "{\"a\":1, \"b\":2}" } }
+		// TODO: Add tests for string escapes.
+		return asList(new Object[][]{
+			{ null, asList("null", " null", " null ") },
+			{ true, asList("true") },
+			{ false, asList("false") },
+			{ 0, asList("0", "-0") },
+			{ 1, asList("1") },
+			{ 1000000000000000000l, asList("1000000000000000000") },
+			{ -1, asList("-1") },
+			{ -1000000000000000000l, asList("-1000000000000000000") },
+			{ (long) 1e10, asList("10000000000") },
+			{ 0., asList("0.0", "0e0", "0e+0", "0e-0", "0e10", "-0.0", "-0e0", "-0e+0", "-0e-0", "-0e10") },
+			{ 1., asList("1.0", "1.0e0", "1e0", "1e+0", "1e-0") },
+			{ 1.5, asList("1.5", "1.5e0") },
+			{ 1e10, asList("1e10", "1e+10") },
+			{ 1e-10, asList("1e-10") },
+			{ -1., asList("-1.0", "-1.0e0", "-1e0", "-1e+0", "-1e-0") },
+			{ -1.5, asList("-1.5", "-1.5e0") },
+			{ -1e10, asList("-1e10", "-1e+10") },
+			{ -1e-10, asList("-1e-10") },
+			{ "abc", asList("\"abc\"") },
+			{ list(), asList("[]", " [ ] ") },
+			{ list().add(1).add(2), asList("[1,2]", "[1, 2]", " [ 1 , 2 ] ") },
+			{ map(), asList("{}") },
+			{ map().put("a", 1).put("b", 2), asList("{\"a\":1, \"b\":2}") }
 		});
 	}
 }
