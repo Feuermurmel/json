@@ -59,6 +59,13 @@ public interface JsonMap extends JsonObject, Iterable<String> {
 	int size();
 
 	/**
+	 * Create a {@link Map} with the pairs of this JSON map.
+	 * <p/>
+	 * The new map is independet of this JSON map but the elements themselves are not cloned.
+	 */
+	Map<String, JsonObject> toMap();
+
+	/**
 	 * Covariant overload of {@link JsonObject#clone()} so that the result does not need to be casted to a {@link JsonMap}.
 	 */
 	@Override

@@ -48,7 +48,6 @@
 		</plugins>
 	</build>
 	<dependencies>
-		<!-- Dependencies used by all modules. -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

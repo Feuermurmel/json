@@ -58,6 +58,11 @@ final class JsonListImpl extends AbstractJsonObject implements JsonList {
 	}
 
 	@Override
+	public List<JsonObject> toList() {
+		return new ArrayList<>(data);
+	}
+
+	@Override
 	public JsonList asList() {
 		return this;
 	}

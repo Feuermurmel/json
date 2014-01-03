@@ -56,6 +56,11 @@ final class JsonMapImpl extends AbstractJsonObject implements JsonMap {
 	}
 
 	@Override
+	public Map<String, JsonObject> toMap() {
+		return new LinkedHashMap<>(data);
+	}
+
+	@Override
 	public JsonMap asMap() {
 		return this;
 	}
