@@ -65,13 +65,6 @@ public interface JsonList extends JsonObject, Iterable<JsonObject> {
 	int size();
 
 	/**
-	 * Create a {@link List} with the elements of this JSON list.
-	 * <p/>
-	 * The new list is independet of this JSON list but the elements themselves are not cloned.
-	 */
-	List<JsonObject> toList();
-
-	/**
 	 * Covariant overload of {@link JsonObject#clone()} so that the result does not need to be casted to a {@link JsonList}.
 	 */
 	@Override

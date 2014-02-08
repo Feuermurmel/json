@@ -1,6 +1,8 @@
 package ch.feuermurmel.json;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Super class of all classes implementing the different JSON data types.
@@ -24,7 +26,7 @@ abstract class AbstractJsonObject implements JsonObject {
 		try {
 			toString(builder);
 		} catch (IOException e) {
-			throw new RuntimeException(e); // should never happen, as we're writing into a StringBuilder
+			throw new AssertionError(e); // should never happen, as we're writing into a StringBuilder
 		}
 
 		return builder.toString();
@@ -37,12 +39,12 @@ abstract class AbstractJsonObject implements JsonObject {
 
 	@Override
 	public boolean asBoolean() {
-		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a boolean!");
+		throw getUnsupportedTypeException("a boolean");
 	}
 
 	@Override
 	public long asLong() {
-		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a long!");
+		throw getUnsupportedTypeException("a long");
 	}
 
 	@Override
@@ -52,7 +54,7 @@ abstract class AbstractJsonObject implements JsonObject {
 
 	@Override
 	public double asDouble() {
-		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a double!");
+		throw getUnsupportedTypeException("a double");
 	}
 
 	@Override
@@ -62,17 +64,27 @@ abstract class AbstractJsonObject implements JsonObject {
 
 	@Override
 	public String asString() {
-		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a String!");
+		throw getUnsupportedTypeException("a String");
 	}
 
 	@Override
 	public JsonList asList() {
-		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a List!");
+		throw getUnsupportedTypeException("a List");
+	}
+
+	@Override
+	public List<JsonObject> toList() {
+		throw getUnsupportedTypeException("a List");
 	}
 
 	@Override
 	public JsonMap asMap() {
-		throw new UnsupportedTypeException("Instances of " + getClass().getName() + " cannot be converted to a Map!");
+		throw getUnsupportedTypeException("a Map");
+	}
+
+	@Override
+	public Map<String, JsonObject> toMap() {
+		throw getUnsupportedTypeException("a Map");
 	}
 
 	@Override
@@ -128,5 +140,9 @@ abstract class AbstractJsonObject implements JsonObject {
 	@Override
 	public boolean isString() {
 		return false;
+	}
+
+	protected final UnsupportedTypeException getUnsupportedTypeException(String requestedType) {
+		return new UnsupportedTypeException(String.format("Instances of %s cannot be converted to %s!", getClass().getName(), requestedType));
 	}
 }

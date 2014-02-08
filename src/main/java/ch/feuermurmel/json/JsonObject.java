@@ -2,6 +2,8 @@ package ch.feuermurmel.json;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Interface that is implemented by all JSON value types.
@@ -129,11 +131,25 @@ public interface JsonObject extends JsonConvertible {
 	JsonList asList();
 
 	/**
+	 * Create a {@link List} with the elements of this JSON list.
+	 * <p/>
+	 * The new list is independet of this JSON list but the elements themselves are not cloned.
+	 */
+	List<JsonObject> toList();
+
+	/**
 	 * Cast this instance to a {@link JsonMap}.
 	 *
 	 * @throws UnsupportedTypeException when this object does not represent an JSON map as declared by {@link #isMap()}.
 	 */
 	JsonMap asMap();
+
+	/**
+	 * Create a {@link Map} with the pairs of this JSON map.
+	 * <p/>
+	 * The new map is independet of this JSON map but the elements themselves are not cloned.
+	 */
+	Map<String, JsonObject> toMap();
 
 	/**
 	 * Return the JSON object in it's string representation.
