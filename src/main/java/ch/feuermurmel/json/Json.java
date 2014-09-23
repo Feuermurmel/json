@@ -18,9 +18,7 @@ public final class Json {
 	private static final Charset defaultCharset = Charset.forName("utf-8");
 
 	/**
-	 * Shortcut for {@link JsonListImpl#create()}.
-	 * <p/>
-	 * Returns a new, empty {@link JsonListImpl}. Useful using a static import for this class. This method is useful when used in a way like this:
+	 * Returns a new, empty {@link JsonList}. Useful using a static import for this class. This method is useful when used in a way like this:
 	 * <p/>
 	 * {@code JsonList list = list().add(1).add(2).add("three");}
 	 *
@@ -35,9 +33,7 @@ public final class Json {
 	}
 
 	/**
-	 * Shortcut for {@link JsonMapImpl#create()}.
-	 * <p/>
-	 * Returns a new, empty {@link JsonMapImpl}. Useful using a static import for this class. This method is useful when used in a way like this:
+	 * Returns a new, empty {@link JsonMap}. Useful using a static import for this class. This method is useful when used in a way like this:
 	 * <p/>
 	 * {@code JsonMap map = map().add("one", 1).add("two", 2);}
 	 *

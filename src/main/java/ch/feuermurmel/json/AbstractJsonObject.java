@@ -143,6 +143,6 @@ abstract class AbstractJsonObject implements JsonObject {
 	}
 
 	protected final UnsupportedTypeException getUnsupportedTypeException(String requestedType) {
-		return new UnsupportedTypeException(String.format("Instances of %s cannot be converted to %s!", getClass().getName(), requestedType));
+		return new UnsupportedTypeException(String.format("Instances of %s cannot be converted to %s.", getClass().getName(), requestedType));
 	}
 }
