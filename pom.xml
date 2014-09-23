@@ -26,6 +26,7 @@
 				<version>2.9.1</version>
 				<configuration>
 					<docfilessubdirs>true</docfilessubdirs>
+					<additionalparam>-Xdoclint:none</additionalparam>
 				</configuration>
 				<executions>
 					<execution>
