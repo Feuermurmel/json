@@ -7,7 +7,7 @@ import java.io.IOException;
  * <p/>
  * You do not need to create instances of this class when creating JSON data structures as all JSON classes accept Javas true and false values, where appropriate. You can also use {@link Json#convert(Object)} to create a JsonString.
  * <p/>
- * Instances of {@code JsonString} are immutables like Java {@code Strings}.
+ * Instances of {@code JsonString} are immutable like Java {@code Strings}.
  */
 final class JsonString extends AbstractJsonObject {
 	private final String value;
