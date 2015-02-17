@@ -133,7 +133,7 @@ public interface JsonObject extends JsonConvertible {
 	/**
 	 * Create a {@link List} with the elements of this JSON list.
 	 * <p/>
-	 * The new list is independet of this JSON list but the elements themselves are not cloned.
+	 * The new list is independent of this JSON list but the elements themselves are not cloned.
 	 */
 	List<JsonObject> toList();
 	
@@ -147,7 +147,7 @@ public interface JsonObject extends JsonConvertible {
 	/**
 	 * Create a {@link Map} with the pairs of this JSON map.
 	 * <p/>
-	 * The new map is independet of this JSON map but the elements themselves are not cloned.
+	 * The new map is independent of this JSON map but the elements themselves are not cloned.
 	 */
 	Map<String, JsonObject> toMap();
 	

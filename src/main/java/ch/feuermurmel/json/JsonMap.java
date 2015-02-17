@@ -7,7 +7,7 @@ import java.util.Map;
  * <p/>
  * This map is mutable, elements can be added and removed and the keys can be iterated over.
  * <p/>
- * Instances can be created using {@link Json#map()}. All JSON datastructures also accept Java instances of {@link Map} as long as thier values are accepted by {@link Json#convert(Object)}.
+ * Instances can be created using {@link Json#map()}. All JSON data structures also accept Java instances of {@link Map} as long as their values are accepted by {@link Json#convert(Object)}.
  * <p/>
  * All methods change the value if this map support method-chaining.
  */

@@ -29,7 +29,7 @@ public interface JsonList extends JsonObject, Iterable<JsonObject> {
 	 * Replace the object at the specified index.
 	 *
 	 * @param index Index of the object to replace.
-	 * @param e The replacment object.
+	 * @param e The replacement object.
 	 */
 	JsonList set(int index, Object e);
 	
