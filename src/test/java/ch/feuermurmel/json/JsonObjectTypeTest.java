@@ -1,14 +1,25 @@
 package ch.feuermurmel.json;
 
-import java.lang.management.OperatingSystemMXBean;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Test;
 
-import static ch.feuermurmel.json.Json.*;
+import static ch.feuermurmel.json.Json.convert;
+import static ch.feuermurmel.json.Json.list;
+import static ch.feuermurmel.json.Json.map;
+import static ch.feuermurmel.json.JsonObjectTypeTest.Attribute.isBoolean;
+import static ch.feuermurmel.json.JsonObjectTypeTest.Attribute.isFloating;
+import static ch.feuermurmel.json.JsonObjectTypeTest.Attribute.isIntegral;
+import static ch.feuermurmel.json.JsonObjectTypeTest.Attribute.isList;
+import static ch.feuermurmel.json.JsonObjectTypeTest.Attribute.isMap;
+import static ch.feuermurmel.json.JsonObjectTypeTest.Attribute.isNull;
+import static ch.feuermurmel.json.JsonObjectTypeTest.Attribute.isNumber;
+import static ch.feuermurmel.json.JsonObjectTypeTest.Attribute.isString;
+import static ch.feuermurmel.json.JsonObjectTypeTest.Attribute.values;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static ch.feuermurmel.json.JsonObjectTypeTest.Attribute.*;
 
 public final class JsonObjectTypeTest {
 	@Test
@@ -21,7 +32,7 @@ public final class JsonObjectTypeTest {
 		checkType(list(), isList);
 		checkType(map(), isMap);
 	}
-
+	
 	static void checkType(Object value, Attribute... expectedAttributes) {
 		Set<Attribute> expectedAttributesSet = new HashSet<>(Arrays.asList(expectedAttributes));
 		
@@ -38,43 +49,50 @@ public final class JsonObjectTypeTest {
 			boolean getValue(JsonObject instance) {
 				return instance.isNull();
 			}
-		}, isBoolean {
+		},
+		isBoolean {
 			@Override
 			boolean getValue(JsonObject instance) {
 				return instance.isBoolean();
 			}
-		}, isNumber {
+		},
+		isNumber {
 			@Override
 			boolean getValue(JsonObject instance) {
 				return instance.isNumber();
 			}
-		}, isIntegral {
+		},
+		isIntegral {
 			@Override
 			boolean getValue(JsonObject instance) {
 				return instance.isIntegral();
 			}
-		}, isFloating {
+		},
+		isFloating {
 			@Override
 			boolean getValue(JsonObject instance) {
 				return instance.isFloating();
 			}
-		}, isString {
+		},
+		isString {
 			@Override
 			boolean getValue(JsonObject instance) {
 				return instance.isString();
 			}
-		}, isList {
+		},
+		isList {
 			@Override
 			boolean getValue(JsonObject instance) {
 				return instance.isList();
 			}
-		}, isMap {
+		},
+		isMap {
 			@Override
 			boolean getValue(JsonObject instance) {
 				return instance.isMap();
 			}
 		};
-
+		
 		abstract boolean getValue(JsonObject instance);
 	}
 }

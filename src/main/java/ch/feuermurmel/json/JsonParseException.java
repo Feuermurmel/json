@@ -7,7 +7,7 @@ public final class JsonParseException extends Exception {
 	JsonParseException(String message) {
 		super(message);
 	}
-
+	
 	/**
 	 * @param fileInfo May be null if no file name was specified.
 	 * @param line
@@ -18,12 +18,13 @@ public final class JsonParseException extends Exception {
 	 */
 	static JsonParseException create(String fileInfo, int line, int column, String msg) {
 		String message;
-
-		if (fileInfo == null)
+		
+		if (fileInfo == null) {
 			message = String.format("line %s, column %s: %s", line, column, msg);
-		else
+		} else {
 			message = String.format("%s: line %s, column %s: %s", fileInfo, line, column, msg);
-
+		}
+		
 		return new JsonParseException(message);
 	}
 }

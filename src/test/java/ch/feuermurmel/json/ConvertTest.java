@@ -3,7 +3,7 @@ package ch.feuermurmel.json;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static ch.feuermurmel.json.Json.*;
+import static ch.feuermurmel.json.Json.convert;
 
 public final class ConvertTest {
 	@Test

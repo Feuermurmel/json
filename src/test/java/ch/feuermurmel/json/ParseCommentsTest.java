@@ -1,14 +1,17 @@
 package ch.feuermurmel.json;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import static ch.feuermurmel.json.Json.*;
-import static org.junit.Assert.*;
+import static ch.feuermurmel.json.Json.convert;
+import static ch.feuermurmel.json.Json.list;
+import static ch.feuermurmel.json.Json.parse;
+import static org.junit.Assert.assertThat;
 
 @SuppressWarnings("InstanceVariableMayNotBeInitialized")
 @RunWith(Parameterized.class)
@@ -23,7 +26,7 @@ public final class ParseCommentsTest {
 	public void testParse() throws JsonParseException {
 		assertThat(parse(document), CoreMatchers.is(convert(value)));
 	}
-
+	
 	private static final List<Object[]> cases = new ArrayList<>();
 	
 	static {
@@ -36,9 +39,10 @@ public final class ParseCommentsTest {
 	public static List<Object[]> getParameters() {
 		return cases;
 	}
-
+	
 	private static void addCase(Object value, String... documents) {
-		for (String i : documents)
-			cases.add(new Object[]{ value, i });
+		for (String i : documents) {
+			cases.add(new Object[] { value, i });
+		}
 	}
 }

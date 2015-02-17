@@ -8,26 +8,26 @@ package ch.feuermurmel.json;
 final class JsonNull extends AbstractJsonObject {
 	private JsonNull() {
 	}
-
+	
 	@Override
 	public boolean isNull() {
 		return true;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "null";
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		return obj == instance;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		return 0;
 	}
-
+	
 	static final JsonObject instance = new JsonNull();
 }

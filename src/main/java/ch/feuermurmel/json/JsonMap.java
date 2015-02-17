@@ -23,7 +23,7 @@ public interface JsonMap extends JsonObject, Iterable<String> {
 	 * @param v The object to add.
 	 */
 	JsonMap put(String k, Object v);
-
+	
 	/**
 	 * Get the value for the specified key.
 	 *
@@ -32,7 +32,7 @@ public interface JsonMap extends JsonObject, Iterable<String> {
 	 * @throws IllegalArgumentException if the key is not in the map.
 	 */
 	JsonObject get(String k);
-
+	
 	/**
 	 * Same as {@link #get(String)} but returns a default value if the key is not in the map. The default value will be converted to a {@link AbstractJsonObject} using {@link Json#convert(Object)} automatically,
 	 *
@@ -40,24 +40,24 @@ public interface JsonMap extends JsonObject, Iterable<String> {
 	 * @param def Value to return if the key is not in the map.
 	 */
 	JsonObject get(String k, Object def);
-
+	
 	/**
 	 * Remove a key-value pair form the map.
 	 *
 	 * @param k Key of the pair to remove.
 	 */
 	JsonMap remove(String k);
-
+	
 	/**
 	 * Returns whether the map contains a mapping with the specified key.
 	 */
 	boolean has(String k);
-
+	
 	/**
 	 * Number of key-value-pairs in the map.
 	 */
 	int size();
-
+	
 	/**
 	 * Covariant overload of {@link JsonObject#clone()} so that the result does not need to be casted to a {@link JsonMap}.
 	 */

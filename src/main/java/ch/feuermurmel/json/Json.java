@@ -1,9 +1,16 @@
 package ch.feuermurmel.json;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Helper class for creating {@link JsonObject} instances.
@@ -11,12 +18,12 @@ import java.util.*;
 public final class Json {
 	private Json() {
 	}
-
+	
 	@SuppressWarnings("ConstantNamingConvention")
 	public static final JsonObject NULL = JsonNull.instance;
-
+	
 	private static final Charset defaultCharset = Charset.forName("utf-8");
-
+	
 	/**
 	 * Returns a new, empty {@link JsonList}. Useful using a static import for this class. This method is useful when used in a way like this:
 	 * <p/>
@@ -27,11 +34,11 @@ public final class Json {
 	public static JsonList list() {
 		return new JsonListImpl();
 	}
-
+	
 	public static JsonList list(Object... elements) {
 		return convert(Arrays.asList(elements));
 	}
-
+	
 	/**
 	 * Returns a new, empty {@link JsonMap}. Useful using a static import for this class. This method is useful when used in a way like this:
 	 * <p/>
@@ -42,7 +49,7 @@ public final class Json {
 	public static JsonMap map() {
 		return new JsonMapImpl();
 	}
-
+	
 	/**
 	 * Convert a {@code boolean} value to a JSON boolean.
 	 *
@@ -51,7 +58,7 @@ public final class Json {
 	public static JsonObject convert(boolean value) {
 		return value ? JsonBoolean.trueInstance : JsonBoolean.falseInstance;
 	}
-
+	
 	/**
 	 * Convert a {@code long} value to an integral JSON number.
 	 *
@@ -60,7 +67,7 @@ public final class Json {
 	public static JsonObject convert(long value) {
 		return new JsonLong(value);
 	}
-
+	
 	/**
 	 * Convert a {@code double} to a floating JSON number.
 	 *
@@ -69,7 +76,7 @@ public final class Json {
 	public static JsonObject convert(double value) {
 		return new JsonDouble(value);
 	}
-
+	
 	/**
 	 * Convert a {@code char} to a single-character JSON string.
 	 *
@@ -78,19 +85,20 @@ public final class Json {
 	public static JsonObject convert(char value) {
 		return new JsonString(String.valueOf(value));
 	}
-
+	
 	/**
 	 * Convert a {@link String} to a JSON string.
 	 *
 	 * @param value The value to convert.
 	 */
 	public static JsonObject convert(String value) {
-		if (value == null)
+		if (value == null) {
 			throw new IllegalArgumentException("Argument value is null.");
+		}
 		
 		return new JsonString(value);
 	}
-
+	
 	/**
 	 * Convert a {@link List} to a JSON list.
 	 * <p/>
@@ -100,13 +108,14 @@ public final class Json {
 	 */
 	public static JsonList convert(Iterable<?> value) {
 		JsonListImpl list = new JsonListImpl();
-
-		for (Object i : value)
+		
+		for (Object i : value) {
 			list.add(i);
-
+		}
+		
 		return list;
 	}
-
+	
 	/**
 	 * Convert a {@link Map} to a JSON map.
 	 * <p/>
@@ -116,13 +125,14 @@ public final class Json {
 	 */
 	public static JsonMap convert(Map<String, ?> value) {
 		JsonMap map = new JsonMapImpl();
-
-		for (Map.Entry<String, ?> i : value.entrySet())
+		
+		for (Map.Entry<String, ?> i : value.entrySet()) {
 			map.put(i.getKey(), i.getValue());
-
+		}
+		
 		return map;
 	}
-
+	
 	/**
 	 * This method either casts or converts an object to an implementation {@link JsonObject}.
 	 * <p/>
@@ -148,54 +158,67 @@ public final class Json {
 	 */
 	public static JsonObject convert(Object value) {
 		// convertibles
-		if (value instanceof JsonConvertible)
+		if (value instanceof JsonConvertible) {
 			return ((JsonConvertible) value).toJson();
-
+		}
+		
 		// special null treatment
-		if (value == null)
+		if (value == null) {
 			return JsonNull.instance;
-
+		}
+		
 		// booleans
-		if (value instanceof Boolean)
+		if (value instanceof Boolean) {
 			return convert((boolean) value);
-
+		}
+		
 		// numbers
-		if (value instanceof Byte)
+		if (value instanceof Byte) {
 			return convert((byte) value);
-
-		if (value instanceof Short)
+		}
+		
+		if (value instanceof Short) {
 			return convert((short) value);
-
-		if (value instanceof Integer)
+		}
+		
+		if (value instanceof Integer) {
 			return convert((int) value);
-
-		if (value instanceof Long)
+		}
+		
+		if (value instanceof Long) {
 			return convert((long) value);
-
-		if (value instanceof Float)
+		}
+		
+		if (value instanceof Float) {
 			return convert((float) value);
-
-		if (value instanceof Double)
+		}
+		
+		if (value instanceof Double) {
 			return convert((double) value);
-
+		}
+		
 		// strings
-		if (value instanceof Character)
+		if (value instanceof Character) {
 			return convert((char) value);
-
-		if (value instanceof String)
+		}
+		
+		if (value instanceof String) {
 			return convert((String) value);
-
+		}
+		
 		// maps
-		if (value instanceof Map)
+		if (value instanceof Map) {
 			return convertMap((Map<?, ?>) value);
-
+		}
+		
 		// lists
-		if (value instanceof Iterable)
+		if (value instanceof Iterable) {
 			return convert((Iterable<?>) value);
-
+		}
+		
 		throw new UnsupportedTypeException(String.format("Objects of type %s can't be converted to a JsonObject.", value.getClass().getName()));
 	}
-
+	
 	/**
 	 * Parse a JSON document into a {@link AbstractJsonObject}.
 	 * <p/>
@@ -210,7 +233,7 @@ public final class Json {
 	public static JsonObject parse(String input) throws JsonParseException {
 		return parse(input, null);
 	}
-
+	
 	/**
 	 * Like {@link #parse(String)} but with the additional ability to specify a file name or description of the source for error messages.
 	 *
@@ -223,7 +246,7 @@ public final class Json {
 			throw new RuntimeException(e); // should never happen as we're reading from a string
 		}
 	}
-
+	
 	/**
 	 * Parse a JSON document read from a {@link Reader}.
 	 * <p/>
@@ -239,7 +262,7 @@ public final class Json {
 	public static JsonObject parse(Reader input) throws IOException, JsonParseException {
 		return parse(input, null);
 	}
-
+	
 	/**
 	 * Like {@link #parse(Reader)} but with the additional ability to specify a file name or description of the source for error messages.
 	 *
@@ -248,7 +271,7 @@ public final class Json {
 	public static JsonObject parse(Reader input, String sourceInfo) throws IOException, JsonParseException {
 		return Parser.runParser(input, sourceInfo);
 	}
-
+	
 	/**
 	 * Load a JSON document from a file.
 	 * <p/>
@@ -264,7 +287,7 @@ public final class Json {
 	public static JsonObject load(File file) throws IOException, JsonParseException {
 		return load(file.toURI().toURL());
 	}
-
+	
 	/**
 	 * Load a JSON document from the resource identified by the specified URL. This may be used, for example, to load a document from a web server using an HTTP URL or from a resource using a URL obtained using {@link Class#getResource(String)}.
 	 * <p/>
@@ -282,22 +305,23 @@ public final class Json {
 			return parse(new InputStreamReader(inputStream, defaultCharset), url.toString());
 		}
 	}
-
+	
 	/**
 	 * Helper method that checks the keys of the map.
 	 */
 	private static JsonMap convertMap(Map<?, ?> obj) {
 		JsonMap map = new JsonMapImpl();
-
+		
 		for (Map.Entry<?, ?> i : ((Map<?, ?>) obj).entrySet()) {
 			Object key = i.getKey();
-
-			if (!(key instanceof String))
+			
+			if (!(key instanceof String)) {
 				throw new UnsupportedTypeException(String.format("Objects of type %s can't be used as key in a JSON map.", i.getClass()));
-
+			}
+			
 			map.put((String) key, i.getValue());
 		}
-
+		
 		return map;
 	}
 }

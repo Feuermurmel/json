@@ -1,6 +1,5 @@
 package ch.feuermurmel.json;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
@@ -8,7 +7,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import static ch.feuermurmel.json.Json.*;
+import static ch.feuermurmel.json.Json.convert;
+import static ch.feuermurmel.json.Json.list;
+import static ch.feuermurmel.json.Json.map;
+import static ch.feuermurmel.json.Json.parse;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThat;
 
@@ -20,18 +22,18 @@ public final class ParseValuesTest {
 	
 	@Parameterized.Parameter(1)
 	public List<String> documents;
-
+	
 	@Test
 	public void testParse() throws JsonParseException {
 		for (String i : documents) {
 			assertThat(parse(i), CoreMatchers.is(convert(value)));
 		}
 	}
-
+	
 	@Parameterized.Parameters
 	public static List<Object[]> parameters() {
 		// TODO: Add tests for string escapes.
-		return asList(new Object[][]{
+		return asList(new Object[][] {
 			{ null, asList("null", " null", " null ") },
 			{ true, asList("true") },
 			{ false, asList("false") },

@@ -58,7 +58,7 @@ final class Lexer {
 	JsonParseException createParseException(int line, int column, String message) {
 		return JsonParseException.create(sourceInfo, line, column, message);
 	}
-
+	
 	/**
 	 * Parse one token including it's leading whitespace.
 	 */
@@ -75,25 +75,29 @@ final class Lexer {
 				if (testChar('/')) {
 					useChar();
 					
-					while (!(testChar('\n') || isEOF()))
+					while (!(testChar('\n') || isEOF())) {
 						useChar();
+					}
 				} else if (testChar('*')) {
 					useChar();
 					
 					while (!testChar('*')) {
-						if (isEOF())
+						if (isEOF()) {
 							throw createParseException("Invalid comment");
+						}
 						
 						useChar();
 					}
 					
 					useChar();
 					
-					while (testChar('*'))
+					while (testChar('*')) {
 						useChar();
+					}
 					
-					if (!testChar('/'))
+					if (!testChar('/')) {
 						throw createParseException("Invalid comment");
+					}
 					
 					useChar();
 				}
@@ -124,16 +128,18 @@ final class Lexer {
 			startToken();
 			useChar();
 			
-			while (testChar('0', '9') || testChar('.') || testChar('e') || testChar('E') || testChar('-') || testChar('+'))
+			while (testChar('0', '9') || testChar('.') || testChar('e') || testChar('E') || testChar('-') || testChar('+')) {
 				useChar();
+			}
 			
 			// Cannot use the patters to find the match directly because we are reading from a Reader and not a CharSequence.
-			if (integralPattern.matcher(getMatch()).matches())
+			if (integralPattern.matcher(getMatch()).matches()) {
 				return finishToken(TokenType.integralValue);
-			else if (floatingPattern.matcher(getMatch()).matches())
+			} else if (floatingPattern.matcher(getMatch()).matches()) {
 				return finishToken(TokenType.floatingValue);
-			else
+			} else {
 				throw createParseException("Invalid number");
+			}
 		} else if (testChar('\"')) {
 			// "((?:[^\\"]|\\.)*)"
 			startToken();
@@ -145,11 +151,13 @@ final class Lexer {
 					throw createParseException(message);
 				}
 				
-				if (testControlChar())
+				if (testControlChar()) {
 					throw createParseException("Invalid control character");
+				}
 				
-				if (testChar('\\'))
+				if (testChar('\\')) {
 					useChar();
+				}
 				
 				useChar();
 			}
@@ -198,8 +206,9 @@ final class Lexer {
 		useChar();
 		
 		for (int i = 1; i < length; i += 1) {
-			if (!testChar(keyword.charAt(i)))
+			if (!testChar(keyword.charAt(i))) {
 				throw createParseException(currentLine, currentColumn - i, "Invalid token"); // i hope we're safe with `currentColumn - i', multi-line keywords aren't that common ;-)
+			}
 			
 			useChar();
 		}
@@ -224,8 +233,9 @@ final class Lexer {
 			currentColumn += 1;
 		}
 		
-		if (tokenWriter != null)
+		if (tokenWriter != null) {
 			tokenWriter.append(res);
+		}
 		
 		nextChar = readChar();
 		

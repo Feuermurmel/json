@@ -8,19 +8,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import static ch.feuermurmel.json.Json.*;
+import static ch.feuermurmel.json.Json.parse;
 
 @SuppressWarnings("InstanceVariableMayNotBeInitialized")
 @RunWith(Parameterized.class)
 public final class ParseInvalidCommentsTest {
 	@Parameterized.Parameter
 	public String document;
-
+	
 	@Test(expected = JsonParseException.class)
 	public void testParse() throws JsonParseException {
 		parse(document);
 	}
-
+	
 	@Parameterized.Parameters
 	public static List<Object[]> parameters() {
 		// TODO: Add tests for more invalid strings (especially invalid escapes).

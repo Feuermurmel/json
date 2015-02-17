@@ -1,7 +1,5 @@
 package ch.feuermurmel.json;
 
-import java.util.List;
-
 /**
  * Represents a JSON list.
  * <p/>
@@ -18,7 +16,7 @@ public interface JsonList extends JsonObject, Iterable<JsonObject> {
 	 * @param e the object to add.
 	 */
 	JsonList add(Object e);
-
+	
 	/**
 	 * Add an object at the specified index.
 	 *
@@ -26,7 +24,7 @@ public interface JsonList extends JsonObject, Iterable<JsonObject> {
 	 * @param e The object to add.
 	 */
 	JsonList add(int index, Object e);
-
+	
 	/**
 	 * Replace the object at the specified index.
 	 *
@@ -34,14 +32,14 @@ public interface JsonList extends JsonObject, Iterable<JsonObject> {
 	 * @param e The replacment object.
 	 */
 	JsonList set(int index, Object e);
-
+	
 	/**
 	 * Remove the object at the specified index.
 	 *
 	 * @param index Index of object to remove.
 	 */
 	JsonList remove(int index);
-
+	
 	/**
 	 * Get the object at the specified index.
 	 *
@@ -50,7 +48,7 @@ public interface JsonList extends JsonObject, Iterable<JsonObject> {
 	 * @throws IndexOutOfBoundsException if the index is out of range.
 	 */
 	JsonObject get(int index);
-
+	
 	/**
 	 * Same as {@link #get(int)} but returns a default value if the index is out of range.
 	 *
@@ -58,12 +56,12 @@ public interface JsonList extends JsonObject, Iterable<JsonObject> {
 	 * @param def Value to return if the index is out of range.
 	 */
 	JsonObject get(int index, JsonObject def);
-
+	
 	/**
 	 * Number of elements in this list.
 	 */
 	int size();
-
+	
 	/**
 	 * Covariant overload of {@link JsonObject#clone()} so that the result does not need to be casted to a {@link JsonList}.
 	 */
