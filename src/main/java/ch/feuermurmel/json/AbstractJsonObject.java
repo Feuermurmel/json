@@ -93,8 +93,8 @@ abstract class AbstractJsonObject implements JsonObject {
 	}
 	
 	@Override
-	public PrettyPrint prettyPrint() {
-		return new PrettyPrint.Atom(toString());
+	public final PrettyPrint prettyPrint() {
+		return new PrettyPrintImpl(createPrettyPrintNode());
 	}
 	
 	@Override
@@ -144,5 +144,9 @@ abstract class AbstractJsonObject implements JsonObject {
 	
 	protected final UnsupportedTypeException getUnsupportedTypeException(String requestedType) {
 		return new UnsupportedTypeException(String.format("Instances of %s cannot be converted to %s.", getClass().getName(), requestedType));
+	}
+	
+	protected PrettyPrintNode createPrettyPrintNode() {
+		return new PrettyPrintNode.Sequence.Atom(toString());
 	}
 }

@@ -3,7 +3,9 @@ package ch.feuermurmel.json;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 final class JsonMapImpl extends AbstractJsonObject implements JsonMap {
 	private final Map<String, JsonObject> data = new LinkedHashMap<>();
@@ -75,28 +77,6 @@ final class JsonMapImpl extends AbstractJsonObject implements JsonMap {
 	}
 	
 	@Override
-	public PrettyPrint prettyPrint() {
-		PrettyPrint.List res = new PrettyPrint.List("{", "}", " ");
-		
-		for (Map.Entry<String, JsonObject> i : data.entrySet()) {
-			StringBuilder builder = new StringBuilder();
-			
-			try {
-				JsonString.stringRepresentation(builder, i.getKey());
-			} catch (IOException e) {
-				// Can't happen with a StringBuilder.
-				throw new AssertionError(e);
-			}
-			
-			builder.append(":");
-			
-			res.add(new PrettyPrint.Prefix(builder.toString(), i.getValue().prettyPrint()));
-		}
-		
-		return res;
-	}
-	
-	@Override
 	public void toString(Appendable destination) throws IOException {
 		destination.append("{");
 		
@@ -136,5 +116,38 @@ final class JsonMapImpl extends AbstractJsonObject implements JsonMap {
 		}
 		
 		return res;
+	}
+	
+	@Override
+	protected PrettyPrintNode createPrettyPrintNode() {
+		List<PrettyPrintNode> childNodes = data
+			.entrySet()
+			.stream()
+			.map(JsonMapImpl::createNodeFromEntry)
+			.collect(Collectors.toList());
+		
+		return new PrettyPrintNode.Sequence(childNodes, prettyPrintSyntaxElements);
+	}
+	
+	private static final PrettyPrintNode.Sequence.SyntaxElements prettyPrintSyntaxElements = new PrettyPrintNode.Sequence.SyntaxElements("{ ", " }", "{", "}");
+	
+	private static PrettyPrintNode createNodeFromEntry(Map.Entry<String, JsonObject> entry) {
+		StringBuilder keyBuilder = new StringBuilder();
+		JsonObject value = entry.getValue();
+		
+		try {
+			JsonString.stringRepresentation(keyBuilder, entry.getKey());
+		} catch (IOException exception) {
+			// Can't happen with a StringBuilder.
+			throw new AssertionError(exception);
+		}
+		
+		keyBuilder.append(": ");
+		
+		if (!(value instanceof AbstractJsonObject)) {
+			throw new IllegalStateException(String.format("Value of unknown type %s cannot be pretty-printed.", value.getClass()));
+		}
+		
+		return new PrettyPrintNode.Prefix(keyBuilder.toString(), ((AbstractJsonObject) value).createPrettyPrintNode());
 	}
 }

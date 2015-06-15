@@ -169,7 +169,7 @@ public interface JsonObject extends JsonConvertible {
 	void toString(Appendable destination) throws IOException;
 	
 	/**
-	 * Returns a {@link PrettyPrint} instance for this JsonObject which can be used to generate a string representation with more control over formatting.
+	 * Returns a {@link PrettyPrintImpl} instance for this JsonObject which can be used to generate a string representation with more control over formatting.
 	 * <p/>
 	 * {@code PrettyPrint} implements {@code toString()}, an example usage might be:
 	 * <p/>

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 final class JsonListImpl extends AbstractJsonObject implements JsonList {
 	private final List<JsonObject> data = new ArrayList<>();
@@ -76,17 +77,6 @@ final class JsonListImpl extends AbstractJsonObject implements JsonList {
 	}
 	
 	@Override
-	public PrettyPrint prettyPrint() {
-		PrettyPrint.List res = new PrettyPrint.List("[", "]", "");
-		
-		for (JsonObject i : data) {
-			res.add(i.prettyPrint());
-		}
-		
-		return res;
-	}
-	
-	@Override
 	public void toString(Appendable destination) throws IOException {
 		destination.append("[");
 		
@@ -124,5 +114,25 @@ final class JsonListImpl extends AbstractJsonObject implements JsonList {
 		}
 		
 		return res;
+	}
+	
+	@Override
+	protected PrettyPrintNode createPrettyPrintNode() {
+		List<PrettyPrintNode> childNodes = data
+			.stream()
+			.map(JsonListImpl::createNodeFromElement)
+			.collect(Collectors.toList());
+		
+		return new PrettyPrintNode.Sequence(childNodes, prettyPrintSyntaxElements);
+	}
+	
+	private static final PrettyPrintNode.Sequence.SyntaxElements prettyPrintSyntaxElements = new PrettyPrintNode.Sequence.SyntaxElements("[", "]", "[", "]");
+	
+	private static PrettyPrintNode createNodeFromElement(JsonObject element) {
+		if (!(element instanceof AbstractJsonObject)) {
+			throw new IllegalStateException(String.format("Value of unknown type %s cannot be pretty-printed.", element.getClass()));
+		}
+		
+		return ((AbstractJsonObject) element).createPrettyPrintNode();
 	}
 }
