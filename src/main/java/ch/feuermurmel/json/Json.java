@@ -92,10 +92,6 @@ public final class Json {
 	 * @param value The value to convert.
 	 */
 	public static JsonObject convert(String value) {
-		if (value == null) {
-			throw new IllegalArgumentException("Argument value is null.");
-		}
-		
 		return new JsonString(value);
 	}
 	

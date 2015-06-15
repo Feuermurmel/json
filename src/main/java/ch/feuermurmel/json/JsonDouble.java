@@ -9,6 +9,10 @@ final class JsonDouble extends AbstractJsonNumber {
 	 * @param value Value of the new {@link AbstractJsonNumber}.
 	 */
 	JsonDouble(double value) {
+		if (!Double.isFinite(value)) {
+			throw new IllegalArgumentException(String.format("Argument value is not a real number: %s", value));
+		}
+		
 		this.value = value;
 	}
 	
@@ -17,9 +21,6 @@ final class JsonDouble extends AbstractJsonNumber {
 		return true;
 	}
 	
-	/**
-	 * Return the number casted to a double.
-	 */
 	@Override
 	public double asDouble() {
 		return value;

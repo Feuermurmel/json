@@ -12,18 +12,22 @@ import java.io.IOException;
 final class JsonString extends AbstractJsonObject {
 	private final String value;
 	
-	@Override
-	public boolean isString() {
-		return true;
-	}
-	
 	/**
 	 * Create an instance with the specified value.
 	 *
 	 * @param value Value for the new {@code JsonString}.
 	 */
 	JsonString(String value) {
+		if (value == null) {
+			throw new IllegalArgumentException("Argument value is null.");
+		}
+		
 		this.value = value;
+	}
+	
+	@Override
+	public boolean isString() {
+		return true;
 	}
 	
 	@Override
