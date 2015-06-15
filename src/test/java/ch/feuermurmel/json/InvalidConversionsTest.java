@@ -29,6 +29,7 @@ public final class InvalidConversionsTest {
 	public static List<Object[]> parameters() {
 		List<Object[]> res = new ArrayList<>();
 		
+		// Use the coercions of ValidConversionsTest and check that all other coercions fail.
 		for (ValidConversionsTest.ValidCoercions i : ValidConversionsTest.validCoercions) {
 			Set<ValidConversionsTest.Coercion> invalidCoercions = EnumSet.allOf(ValidConversionsTest.Coercion.class);
 			

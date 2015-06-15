@@ -35,4 +35,24 @@ public final class ConvertTest {
 	public void convertStringNull() throws Exception {
 		convert((String) null);
 	}
+	
+	@Test
+	public void convertDouble() throws Exception {
+		Assert.assertEquals(new JsonDouble(1.1), convert(1.1));
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void convertInvalidDouble1() throws Exception {
+		convert(Double.NEGATIVE_INFINITY);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void convertInvalidFloat() throws Exception {
+		convert(Float.NEGATIVE_INFINITY);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void convertInvalidDouble2() throws Exception {
+		convert(Math.sqrt(-1));
+	}
 }
