@@ -1,6 +1,7 @@
 package ch.feuermurmel.json;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,11 @@ abstract class AbstractJsonObject implements JsonObject {
 	@Override
 	public long asLong() {
 		throw getUnsupportedTypeException("a long");
+	}
+
+	@Override
+	public BigInteger asBigInteger() {
+		throw getUnsupportedTypeException("a BigInteger");
 	}
 	
 	@Override

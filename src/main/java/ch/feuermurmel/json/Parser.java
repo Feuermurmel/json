@@ -2,6 +2,7 @@ package ch.feuermurmel.json;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.math.BigInteger;
 
 final class Parser {
 	private final Lexer lexer;
@@ -68,7 +69,12 @@ final class Parser {
 			try {
 				return new JsonLong(Long.valueOf(token.match));
 			} catch (NumberFormatException ignored) {
-				throw lexer.createParseException(token, "Invalid number literal.");
+				try {
+					// maybe token represents a number less than Long.MIN_VALUE or greater than Long.MAX_VALUE
+					return new JsonBigInteger(new BigInteger(token.match));
+				} catch (NumberFormatException ignored2) {
+					throw lexer.createParseException(token, "Invalid number literal.");
+				}
 			}
 		} else if (lexer.testToken(Lexer.TokenType.floatingValue)) {
 			Lexer.Token token = lexer.useToken();

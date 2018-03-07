@@ -2,6 +2,7 @@ package ch.feuermurmel.json;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -97,6 +98,13 @@ public interface JsonObject extends JsonConvertible {
 	 * @throws UnsupportedTypeException when this object does not represent an integral JSON number as declared by {@link #isIntegral()}.
 	 */
 	long asLong();
+
+	/**
+	 * Return the value of an integral JSON number as a {@code BigInteger}.
+	 *
+	 * @throws UnsupportedTypeException when this object does not represent an integral JSON number as declared by {@link #isIntegral()}.
+	 */
+	BigInteger asBigInteger();
 	
 	/**
 	 * Return the value of JSON number as a {@code float}. This may loose precision as the value internally stored as a {@code float} or {@code long}.

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -66,6 +67,15 @@ public final class Json {
 	 */
 	public static JsonObject convert(long value) {
 		return new JsonLong(value);
+	}
+	
+	/**
+	 * Convert a {@code BigInteger} value to an integral JSON number.
+	 *
+	 * @param value The value to convert.
+	 */
+	public static JsonObject convert(BigInteger value) {
+		return new JsonBigInteger(value);
 	}
 	
 	/**
@@ -183,6 +193,10 @@ public final class Json {
 		
 		if (value instanceof Long) {
 			return convert((long) value);
+		}
+		
+		if (value instanceof BigInteger) {
+			return convert((BigInteger) value);
 		}
 		
 		if (value instanceof Float) {
