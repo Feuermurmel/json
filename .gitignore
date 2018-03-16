@@ -6,3 +6,6 @@
 # Maven
 /target/
 /maven/
+/pom.xml.releaseBackup
+/release.properties
+/mvn-repo/
