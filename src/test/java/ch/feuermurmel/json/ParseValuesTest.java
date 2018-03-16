@@ -1,5 +1,6 @@
 package ch.feuermurmel.json;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
@@ -43,6 +44,8 @@ public final class ParseValuesTest {
 			{ -1, asList("-1") },
 			{ -1000000000000000000l, asList("-1000000000000000000") },
 			{ (long) 1e10, asList("10000000000") },
+			{ new BigInteger("14828023015344763744721114075"), asList("14828023015344763744721114075")},
+			{ new BigInteger("-14828023015344763744721114075"), asList("-14828023015344763744721114075")},
 			{ 0., asList("0.0", "0e0", "0e+0", "0e-0", "0e10", "-0.0", "-0e0", "-0e+0", "-0e-0", "-0e10") },
 			{ 1., asList("1.0", "1.0e0", "1e0", "1e+0", "1e-0") },
 			{ 1.5, asList("1.5", "1.5e0") },
